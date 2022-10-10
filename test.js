@@ -34,6 +34,7 @@ const temp = [
 const eco = {10: 1.6, 20:0.8, 21:0.4}
 const comfort = {0:3.3, 10:2.4, 20:1.6, 21:0.8}
 
+const max_limit = 125000
 
 const recursive = (acc_price, score, hour) => {
 
@@ -41,7 +42,7 @@ const recursive = (acc_price, score, hour) => {
         return [acc_price, score]
     }
     if ( (24-hour)*8 + score < 124){
-        return null
+        return [max_limit, 0]
     }
 
     const eco_price = temp[hour] < 10 ? eco[10] : temp[hour] < 20 ? eco[20] : eco[21]
@@ -52,8 +53,30 @@ const recursive = (acc_price, score, hour) => {
     const comfort_rec = recursive(acc_price+comfort_price, score+8, hour+1)
     const off_rec = recursive(acc_price+off_price, score, hour+1)
 
-
     const possible_values = []
+
+    if (eco_rec[1] >= 124) {
+        possible_values.push(eco_rec)
+    }
+
+    if (comfort_rec[1] >= 124) {
+        possible_values.push(comfort_rec)
+    }
+
+    if (off_rec[1] >= 124) {
+        possible_values.push(off_rec)
+    }
+
+    const mi = [max_limit, 0]
+    for (let value of possible_values) {
+        if (value[0] < mi[0]) {
+            mi = value
+        }
+    }
+
+    return mi
+
+
 
 
 }
