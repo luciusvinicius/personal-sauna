@@ -1,4 +1,5 @@
 import { get_day_temp } from "../api/API";
+import { get_day_prices } from '../api/API';
 
 /**
  * Initializes an array with the "cheapest" modes for each hour
@@ -116,13 +117,11 @@ const get_jumps = (modes, temperatures, prices) => {
     return jump_cost
 }
 
-
 export const algorithm = async (start_day, end_day) => { 
     let ret = {};
     for (let i = start_day; i <= end_day; i++) {
-        console.log(`calculating day ${i}`)
         let temperatures = await get_day_temp(i)
-        let prices = [185.90 ,150.00 ,127.50 ,114.60 ,114.10 ,111.10 ,112.60 ,114.50 ,125.02 ,131.97 ,141.80 ,138.00 ,115.60 ,124.99 ,125.02 ,143.00 ,141.00 ,156.17 ,186.03 ,193.15 ,187.95 ,182.30 ,175.12 ,140.38]
+        let prices = await get_day_prices(i)
         let modes = initialize(temperatures)
         console.log(temperatures)
         let count = 0
@@ -216,7 +215,6 @@ export const algorithm = async (start_day, end_day) => {
         }
         ret[i] = day
     }
-    console.log("AAAAAAAA")
     console.log(ret)
     return ret
 }
