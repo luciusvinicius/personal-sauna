@@ -1,0 +1,222 @@
+import { get_day_temp } from "../api/API";
+
+/**
+ * Initializes an array with the "cheapest" modes for each hour
+ * @param {Array} temperatures array of hourly temperatures if a day
+ * @returns {Array} 
+ */
+const initialize = (temperatures) => {
+    const sol = [];
+    temperatures.forEach(temp => {
+        sol.push(temp > 10 ? "eco" : "off");
+    });
+    return sol
+}
+
+/**
+ * Calculates the comfort score of the day
+ * @param {Array} modes array of modes for each hour
+ * @returns {number}  
+ */
+const get_comfort = (modes) => {
+    let sum = 0;
+    modes.forEach(mode => {
+        sum += mode == "eco" ? 4 : mode == "comf" ? 8 : 0
+    })
+    return sum
+}
+    
+/**
+ * Calculates the total cost of the day
+ * @param {Array} modes array of modes for each hour
+ * @param {Array} temperatures array of temperatures for each hour
+ * @param {Array} prices array of prices for each hour
+ * @returns {number}
+ */
+const get_cost = (modes, temperatures, prices) => {
+    let sum = 0
+    for (let i = 0; i < 24; i++) {
+        const mode = modes[i];
+        const temp = temperatures[i];
+        const price = prices[i];
+        if (mode == "off"){
+            sum += 1*price;
+        }  
+        else if (mode == "eco"){
+            if (temp < 10){
+                sum += 1.6*price;
+            }  
+            else if (temp < 20){
+                sum += 0.8*price;
+            } 
+            else {
+                sum += 0.4*price;
+            } 
+        }   
+        else if (mode == "comf"){
+            if (temp < 0) {
+                sum += 11.4*price
+            }
+            else if (temp < 10) {
+                sum += 2.4*price
+            }
+            else if (temp < 20){
+                sum += 1.6*price
+            } 
+            else {
+                sum += 0.8*price
+            }
+        }
+    }
+    return sum   
+}
+   
+/**
+ * Calculates the cost of upgrading the mode of each hour
+ * @param {Array} modes array of modes for each hour
+ * @param {Array} temperatures array of temperatures for each hour
+ * @param {Array} prices array of prices for each hour
+ * @returns {Array} 
+ */
+const get_jumps = (modes, temperatures, prices) => {
+    const jump_cost = []
+    for (let i = 0; i < 24; i++) {
+        const mode = modes[i]
+        const temp = temperatures[i]
+        const price = prices[i]
+        let cost = 0
+        let gain = 0
+        if (mode == "off"){ // off -> eco
+            cost = 0.6
+            gain = 4
+        }
+        else if (mode == "eco"){
+            gain = 4
+            if (temp < 0){
+                cost = 9.8
+            }
+            else if (temp < 10){
+                cost = 0.8
+            }
+            else if (temp < 20){
+                cost = 0.8
+            }
+            else {
+                cost = 0.4
+            }      
+        }
+        else if (mode == "comf"){
+            cost = 100000000000
+            gain = 1
+        }    
+        //console.log(cost + " " + price + " " + gain + " " + cost*price/gain)  
+        jump_cost.push(cost*price/gain)
+    }
+        
+    return jump_cost
+}
+
+
+export const algorithm = async (start_day, end_day) => { 
+    let ret = {};
+    for (let i = start_day; i <= end_day; i++) {
+        console.log(`calculating day ${i}`)
+        let temperatures = await get_day_temp(i)
+        let prices = [185.90 ,150.00 ,127.50 ,114.60 ,114.10 ,111.10 ,112.60 ,114.50 ,125.02 ,131.97 ,141.80 ,138.00 ,115.60 ,124.99 ,125.02 ,143.00 ,141.00 ,156.17 ,186.03 ,193.15 ,187.95 ,182.30 ,175.12 ,140.38]
+        let modes = initialize(temperatures)
+        console.log(temperatures)
+        let count = 0
+        while(get_comfort(modes) < 124){
+            count++
+            let jumps = get_jumps(modes, temperatures, prices)
+            let min_hour = jumps.indexOf(Math.min(...jumps))
+            if (modes[min_hour] === "off"){
+                modes[min_hour] = "eco"
+            }
+            else if (modes[min_hour] === "eco"){
+                modes[min_hour] = "comf"
+            }        
+            else if (modes[min_hour] === "comf"){
+                break
+            }
+        }
+        let day = {};
+        day["modes"] = modes
+        day["temps"] = temperatures
+        day["comf"] = []
+        day["comf_bool"] = {}
+        let eco = []
+        let comf = []
+        let off = []
+        modes.forEach(mode => {
+            if(mode == "off") {
+                day["comf"].push(0)
+                eco.push(0)
+                comf.push(0)
+                off.push(1)
+            }
+            else if(mode === "eco") {
+                day["comf"].push(4)
+                eco.push(1)
+                comf.push(0)
+                off.push(0)
+            }
+            else if(mode === "comf") {
+                day["comf"].push(8)
+                eco.push(0)
+                comf.push(1)
+                off.push(0)
+            }
+        })
+        day["comf_bool"]["eco"] = eco
+        day["comf_bool"]["comf"] = comf
+        day["comf_bool"]["off"] = off
+        day["consumo"] = []
+        day["cost"] = []
+        for (let j = 0; j < 24; j++) {
+            let mode = modes[j]
+            let price = prices[j]
+            let temp = temperatures[j]
+            if (mode === "off"){
+                day["consumo"].push(1)
+                day["cost"].push(price)
+            }  
+            else if (mode === "eco"){
+                if (temp < 10){
+                    day["consumo"].push(1.6)
+                    day["cost"].push(1.6*price)
+                }  
+                else if (temp < 20){
+                    day["consumo"].push(0.8)
+                    day["cost"].push(0.8*price)
+                } 
+                else {
+                    day["consumo"].push(0.4)
+                    day["cost"].push(0.4*price)
+                } 
+            }   
+            else if (mode === "comf"){
+                if (temp < 0) {
+                    day["consumo"].push(11.4)
+                    day["cost"].push(11.4*price)
+                }
+                else if (temp < 10) {
+                    day["consumo"].push(2.4)
+                    day["cost"].push(2.4*price)
+                }
+                else if (temp < 20){
+                    day["consumo"].push(1.6)
+                    day["cost"].push(1.6*price)
+                } 
+                else {
+                    day["consumo"].push(0.8)
+                    day["cost"].push(0.8*price)
+                }
+            }
+        }
+        ret[i] = day
+    }
+    console.log("AAAAAAAA")
+    console.log(ret)
+    return ret
+}

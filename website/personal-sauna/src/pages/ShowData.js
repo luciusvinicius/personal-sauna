@@ -1,10 +1,11 @@
 import React, {useState} from "react";
-import {Col, Row} from "react-bootstrap";
+import {Col, Row, Container} from "react-bootstrap";
 import Forms from "../components/Forms"
-import {CircularProgress, Container} from "@mui/material";
+import {CircularProgress} from "@mui/material";
 import Graph from "../components/Graph";
 import {LABELS} from "../temps/Temps.json";
 import "../css/index.css"
+import PieChart from "../components/PieChart";
 
 
 const ShowData = () => {
@@ -32,12 +33,16 @@ const ShowData = () => {
         )
     }
 
+    const pie_chart = () => {
+        return <PieChart values={[12,8,4]}/>;
+    }
+
     return (
-        <Container>
+        <Container fluid >
             <br/>
             <br/>
             <Row>
-                <Col xs={4}>
+                <Col xs={3} className="pl-5 pt-5">
                     <Forms
                         setLabels={setLabels}
                         setOffs={setOffs}
@@ -56,6 +61,18 @@ const ShowData = () => {
                         graph_or_text()
                     }
 
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    {isLoading ?
+                        <div className={"center-container"}>
+                            <CircularProgress/>
+                        </div>
+                        :
+                        pie_chart()
+
+                    }
                 </Col>
             </Row>
         </Container>
