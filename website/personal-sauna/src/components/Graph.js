@@ -47,7 +47,18 @@ const options = {
     },
     scales: {
         x: {
-            stacked: true}
+            stacked: true
+        },
+        y: {
+            position: "right",
+            stacked: true
+        },
+        type_y: {
+            grid: {
+               drawOnChartArea: false
+            },
+            stacked: true
+        }
     }
 }
 
@@ -67,7 +78,9 @@ ChartJS.register(
 
 
 const filterQuantity = (arr, labels, mult, min_val) => {
-    return arr.slice(0, labels.length).map((v) => v !== 0 ? [min_val, v * mult] : v * mult)
+    // return arr.slice(0, labels.length).map((v) => v !== 0 ? [min_val, v * mult] : v * mult)
+    return arr.slice(0, labels.length).map((v) => v/2)
+
 }
 
 const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
@@ -91,26 +104,30 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
                 borderWidth: 2,
                 fill: false,
                 data: labels.map((_, i) => values[i]),
+                // yAxisID: 'type_y'
             },
             {
                 type: 'bar',
                 label: 'Offs',
                 backgroundColor: 'rgb(230, 230, 30, 0.3)',
                 data: offs_slice,
-                borderColor: 'white',
-                borderWidth: 2,
+                yAxisID: 'type_y'
             },
             {
                 type: 'bar',
                 label: 'Comforts',
                 backgroundColor: 'rgb(10, 60, 235, 0.3)',
                 data: comforts_slice,
+                yAxisID: 'type_y'
+
             },
             {
                 type: 'bar',
                 label: 'Ecos',
                 backgroundColor: 'rgb(30, 230, 30, 0.3)',
                 data: ecos_slice,
+                yAxisID: 'type_y'
+
             },
         ],
     };
