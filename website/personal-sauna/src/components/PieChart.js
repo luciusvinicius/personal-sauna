@@ -45,7 +45,10 @@ const PieChart = ({values}) => {
         <>
             <Chart
                 type={"pie"}
-                data={data}/>
+                data={data}
+                width={"10%"}
+                options={{ maintainAspectRatio: false }}
+                />
         </>
     )
 }

@@ -34,7 +34,12 @@ const ShowData = () => {
     }
 
     const pie_chart = () => {
-        return <PieChart values={[12,8,4]}/>;
+        return (
+            <div>
+                <PieChart values={[12,8,4]}/>
+            </div>
+        
+        );
     }
 
     return (
@@ -42,7 +47,7 @@ const ShowData = () => {
             <br/>
             <br/>
             <Row>
-                <Col xs={3} className="pl-5 pt-5">
+                <Col xs={2} className="pl-5 pt-5">
                     <Forms
                         setLabels={setLabels}
                         setOffs={setOffs}
@@ -52,28 +57,50 @@ const ShowData = () => {
                         setValues={setValues}
                     />
                 </Col>
-                <Col xs={8}>
-                    {isLoading ?
-                        <div className={"center-container"}>
-                            <CircularProgress/>
-                        </div>
-                        :
-                        graph_or_text()
-                    }
-
+            
+                <Col xs={10}>
+                    <Row>
+                        <Col xl={6} md={12}>
+                            {isLoading ?
+                                <div className={"center-container"}>
+                                    <CircularProgress/>
+                                </div>
+                                :
+                                graph_or_text()
+                            }
+                        </Col>
+                        <Col xl={6} md={12}>
+                            {isLoading ?
+                                <div className={"center-container"}>
+                                    <CircularProgress/>
+                                </div>
+                                :
+                                graph_or_text()
+                            }
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xl={6} md={12}>
+                            {isLoading ?
+                                <div className={"center-container"}>
+                                    <CircularProgress/>
+                                </div>
+                                :
+                                graph_or_text()
+                            }
+                        </Col>
+                        <Col xl={6} md={12}>
+                            {isLoading ?
+                                <div className={"center-container"}>
+                                    <CircularProgress/>
+                                </div>
+                                :
+                                graph_or_text()
+                            }
+                        </Col>
+                    </Row>
                 </Col>
-            </Row>
-            <Row>
-                <Col>
-                    {isLoading ?
-                        <div className={"center-container"}>
-                            <CircularProgress/>
-                        </div>
-                        :
-                        pie_chart()
-
-                    }
-                </Col>
+               
             </Row>
         </Container>
     )
