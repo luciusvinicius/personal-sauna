@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+
+  website:
+    build: ./website/personal-sauna
+    container_name: website
+    ports:
+      - 3001:3000
+    stdin_open: true
+    restart: unless-stopped
+    image: website
+
+  api:
+    build: ./EnergyApi
+    container_name: api
+    ports:
+      - 5000:5000
+    restart: unless-stopped
+    image: api
