@@ -13,26 +13,6 @@ import {
     BarController,
 } from 'chart.js';
 
-// import faker from 'faker';
-
-
-// const config = {
-//     type: 'bar',
-//     // data: data,
-//     options: {
-//         responsive: true,
-//         plugins: {
-//             legend: {
-//                 position: 'top',
-//             },
-//             title: {
-//                 display: true,
-//                 text: 'Chart.js Combined Line/Bar Chart'
-//             }
-//         }
-//     },
-// };
-
 const options = {
     responsive: true,
 
@@ -46,18 +26,18 @@ const options = {
         }
     },
     scales: {
-        x: {
-            stacked: true
-        },
+        // x: {
+        //     stacked: true
+        // },
         y: {
             position: "right",
-            stacked: true
+            // stacked: true
         },
         type_y: {
             grid: {
                drawOnChartArea: false
             },
-            stacked: true
+            // stacked: true
         }
     }
 }
@@ -74,24 +54,24 @@ ChartJS.register(
     BarController
 );
 
-// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-
-const filterQuantity = (arr, labels, mult, min_val) => {
+const filterQuantity = (arr, labels, scale) => {
     // return arr.slice(0, labels.length).map((v) => v !== 0 ? [min_val, v * mult] : v * mult)
-    return arr.slice(0, labels.length).map((v) => v/2)
+    return arr.slice(0, labels.length).map((v) => v/scale)
 
 }
 
 const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
 
-    const max_val = 7
-    const min_val = -1
+    if (offs.length === 0 || ecos.length === 0 || comforts.length === 0) {
+        return <p>Loading</p>
+    }
+    const scale = offs[0] + ecos[0] + comforts[0]
     console.log("values", values)
-    console.log(max_val)
-    const comforts_slice = filterQuantity(comforts, labels, max_val, min_val)
-    const offs_slice = filterQuantity(offs, labels, max_val, min_val)
-    const ecos_slice = filterQuantity(ecos, labels, max_val, min_val)
+
+    const comforts_slice = filterQuantity(comforts, labels, scale)
+    const offs_slice = filterQuantity(offs, labels, scale)
+    const ecos_slice = filterQuantity(ecos, labels, scale)
 
 
     const data = {
