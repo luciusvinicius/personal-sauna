@@ -11,9 +11,65 @@ import {getData} from "../api/API";
 
 const STARTING_DATE = "2021-12-01T01:00:00Z"
 const ENDING_DATE = "2021-12-31T01:00:00Z"
-const STARTING_PERIOD = "daily"
+const STARTING_PERIOD = 24
 const STARTING_PARAMETER = "external_temp"
 
+const filterModesByPeriod = (period=1, ecos=[], comfs=[], offs=[]) => {
+
+    if (period === 1) {
+        return {
+            ecos: ecos,
+            comfs: comfs,
+            offs: offs
+        }
+    }
+
+    let new_ecos = []
+    let new_comfs = []
+    let new_offs = []
+
+    for (let i=0; i < ecos.length; i++) {
+        let idx = Math.floor(i/period)
+        if (idx >= new_ecos.length) {
+            new_ecos.push(0)
+            new_offs.push(0)
+            new_comfs.push(0)
+        }
+        new_ecos[idx] += ecos[i]
+        new_comfs[idx] += comfs[i]
+        new_offs[idx] += offs[i]
+    }
+
+    return {
+        ecos: new_ecos,
+        comfs: new_offs,
+        offs: new_comfs
+    }
+}
+
+const filterValueByPeriod = (period=1, values=[]) => {
+    let new_val = []
+
+    let idx = 0
+    let hadLastDivision = false
+    for (let i=0; i < values.length; i++) {
+        idx = Math.floor(i/period)
+        hadLastDivision = false
+        if (idx >= new_val.length) {
+            new_val[idx-1] = new_val[idx-1]/period
+            hadLastDivision = true
+            new_val.push(0)
+        }
+        new_val[idx] += values[i]
+    }
+
+    if (!hadLastDivision) {
+        new_val[idx] /= period
+    }
+
+    return new_val
+
+}
 
 const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues}) => {
 
@@ -32,10 +88,13 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
         // .then(response => {
         console.log("response", response)
         setLabels(response.labels)
-        setValues(response.temps)
-        setOffs(response.offs)
-        setEcos(response.ecos)
-        setComforts(response.comforts)
+        const new_value = filterValueByPeriod(data.period, response.temps)
+        setValues(new_value)
+        const new_period = filterModesByPeriod(data.period, response.ecos, response.comforts, response.offs)
+        setOffs(new_period.offs)
+        setEcos(new_period.ecos)
+        setComforts(new_period.comfs)
+
         // })
     }
 
