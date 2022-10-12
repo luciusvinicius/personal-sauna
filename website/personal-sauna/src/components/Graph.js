@@ -68,9 +68,7 @@ ChartJS.register(
 
 
 const filterQuantity = (arr, labels, scale) => {
-    // return arr.slice(0, labels.length).map((v) => v !== 0 ? [min_val, v * mult] : v * mult)
     return arr.slice(0, labels.length).map((v) => v/scale)
-
 }
 
 const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
@@ -79,7 +77,6 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
         return <p>Loading</p>
     }
     const scale = offs[0] + ecos[0] + comforts[0]
-    console.log("values", values)
 
     const comforts_slice = filterQuantity(comforts, labels, scale)
     const offs_slice = filterQuantity(offs, labels, scale)
@@ -96,7 +93,6 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
                 borderWidth: 2,
                 fill: false,
                 data: labels.map((_, i) => values[i]),
-                // yAxisID: 'type_y'
             },
             {
                 type: 'bar',

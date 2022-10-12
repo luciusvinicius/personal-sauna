@@ -4,7 +4,10 @@ import ShowData from "./pages/ShowData";
 import "./css/index.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { algorithm } from './algo/algotithm';
+
 function App() {
+  algorithm(3, 5)
   return (
       <>
         <h1 className={"title"}>Personal Sauna</h1>
