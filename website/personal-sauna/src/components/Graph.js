@@ -26,18 +26,30 @@ const options = {
         }
     },
     scales: {
-        // x: {
-        //     stacked: true
-        // },
+        x: {
+            grid: {
+                lineWidth: 3
+            },
+            title: {
+                display: true,
+                text: "Time"
+            }
+        },
         y: {
             position: "right",
-            // stacked: true
+            title: {
+                display: true,
+                text: "Parameter Value"
+            }
         },
         type_y: {
             grid: {
-               drawOnChartArea: false
+               drawOnChartArea: false,
             },
-            // stacked: true
+            title: {
+                display: true,
+                text: "Heat Bomb Mode (%)"
+            }
         }
     }
 }
@@ -88,8 +100,8 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
             },
             {
                 type: 'bar',
-                label: 'Offs',
-                backgroundColor: 'rgb(230, 230, 30, 0.3)',
+                label: 'Off %',
+                backgroundColor: 'rgb(30, 30, 30, 0.3)',
                 data: offs_slice,
                 yAxisID: 'type_y',
                 barThickness: 'flex',
@@ -98,7 +110,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
             },
             {
                 type: 'bar',
-                label: 'Comforts',
+                label: 'Comfort %',
                 backgroundColor: 'rgb(10, 60, 235, 0.3)',
                 data: comforts_slice,
                 yAxisID: 'type_y',
@@ -108,7 +120,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
             },
             {
                 type: 'bar',
-                label: 'Ecos',
+                label: 'Eco %',
                 backgroundColor: 'rgb(30, 230, 30, 0.3)',
                 data: ecos_slice,
                 yAxisID: 'type_y',
