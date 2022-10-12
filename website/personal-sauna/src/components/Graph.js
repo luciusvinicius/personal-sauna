@@ -111,23 +111,30 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
                 label: 'Offs',
                 backgroundColor: 'rgb(230, 230, 30, 0.3)',
                 data: offs_slice,
-                yAxisID: 'type_y'
+                yAxisID: 'type_y',
+                barThickness: 'flex',
+                barPercentage: 1,
+                categoryPercentage: 1,
             },
             {
                 type: 'bar',
                 label: 'Comforts',
                 backgroundColor: 'rgb(10, 60, 235, 0.3)',
                 data: comforts_slice,
-                yAxisID: 'type_y'
-
+                yAxisID: 'type_y',
+                barThickness: 'flex',
+                barPercentage: 1,
+                categoryPercentage: 1,
             },
             {
                 type: 'bar',
                 label: 'Ecos',
                 backgroundColor: 'rgb(30, 230, 30, 0.3)',
                 data: ecos_slice,
-                yAxisID: 'type_y'
-
+                yAxisID: 'type_y',
+                barThickness: 'flex',
+                barPercentage: 1,
+                categoryPercentage: 1,
             },
         ],
     };
