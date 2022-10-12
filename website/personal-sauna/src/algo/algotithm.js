@@ -116,6 +116,12 @@ const get_jumps = (modes, temperatures, prices) => {
     return jump_cost
 }
 
+const getNextDay = (day) => {
+    let tomorrow = new Date(day)
+    tomorrow.setDate(day.get_date() + 1)
+    return tomorrow
+}
+
 
 export const getData = async (start_day, end_day) => {
     let ret = [];

@@ -33,23 +33,7 @@ export const get_day_temp = async (day) => {
             temps.push(element.main.temp-273.15)
         });
     }
-    // let resp = response.json()
-    // console.log(resp)
-    // resp.list.forEach(element => {
-    //     temps.push(element.main.temp-273.15)
-    // });
 
-    // axios.request(options).then(function (response) {
-    //     console.log("D")
-    //     let resp = response.data;
-    //     console.log(resp)
-    //     resp.list.forEach(element => {
-    //         temps.push(element.main.temp-273.15)
-    //     });
-    // }).catch(function (error) {
-    //     console.log("ERROR")
-    //     console.error(error);
-    // });
 
     return temps
 

@@ -72,7 +72,9 @@ const filterValueByPeriod = (period=1, values=[]) => {
 
 }
 
+const filterLabels = (period, days) => {
 
+}
 
 const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues}) => {
 
@@ -97,8 +99,14 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
         // setOffs(new_period.offs)
         // setEcos(new_period.ecos)
         // setComforts(new_period.comfs)
+        let start_date = new Date(data.start_date)
+        let end_date = new Date(data.end_date)
+        // console.log(start_date)
+        // let tomorrow = new Date(start_date)
+        // tomorrow.setDate(start_date.getDate()+1)
+        // console.log(tomorrow)
 
-        getData(1, 2)
+        getData(start_date, end_date)
             .then(response => {
                 console.log("sussy response", response)
                 let values = []
