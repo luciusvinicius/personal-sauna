@@ -1,15 +1,15 @@
 export const periods = [
     {
         label: "Hourly",
-        value: "hourly"
+        value: 1
     },
     {
         label: "Daily",
-        value: "daily"
+        value: 24
     },
     {
         label: "Weekly",
-        value: "weekly"
+        value: 24 * 7
     }
 ]
 
