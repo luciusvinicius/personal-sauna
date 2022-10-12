@@ -7,7 +7,8 @@ import {Col, Row} from "react-bootstrap";
 import FormInputDropdown from "./FormInputDropdown";
 import {FormInputDatePicker} from "./FormInputDatePicker";
 import {periods, parameters} from "./FormOptions";
-import {getData} from "../api/API";
+import {getData} from "../algo/algotithm";
+
 
 const STARTING_DATE = "2021-12-01T01:00:00Z"
 const ENDING_DATE = "2021-12-31T01:00:00Z"
@@ -71,6 +72,8 @@ const filterValueByPeriod = (period=1, values=[]) => {
 
 }
 
+
+
 const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues}) => {
 
     const {handleSubmit, reset, control} = useForm({
@@ -84,16 +87,48 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
 
     const onSubmit = (data) => {
         console.log(data);
-        const response = getData(data)
-        // .then(response => {
-        console.log("response", response)
-        setLabels(response.labels)
-        const new_value = filterValueByPeriod(data.period, response.temps)
-        setValues(new_value)
-        const new_period = filterModesByPeriod(data.period, response.ecos, response.comforts, response.offs)
-        setOffs(new_period.offs)
-        setEcos(new_period.ecos)
-        setComforts(new_period.comfs)
+        // const response = getData(data)
+        // // .then(response => {
+        // // console.log("response", response)
+        // setLabels(response.labels)
+        // const new_value = filterValueByPeriod(data.period, response.temps)
+        // setValues(new_value)
+        // const new_period = filterModesByPeriod(data.period, response.ecos, response.comforts, response.offs)
+        // setOffs(new_period.offs)
+        // setEcos(new_period.ecos)
+        // setComforts(new_period.comfs)
+
+        getData(1, 2)
+            .then(response => {
+                console.log("sussy response", response)
+                let values = []
+                let ecos = []
+                let comfs = []
+                let offs = []
+                let labels = []
+                response.map(day => {
+                    values = values.concat(day.temps)
+                    ecos = ecos.concat(day.modes_bool.eco)
+                    comfs = comfs.concat(day.modes_bool.comf)
+                    offs = offs.concat(day.modes_bool.off)
+                    labels = labels.concat(day.date)
+                })
+
+                const new_value = filterValueByPeriod(data.period, values)
+                const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
+
+                setValues(new_value)
+                setOffs(new_modes.offs)
+                setEcos(new_modes.ecos)
+                setComforts(new_modes.comfs)
+                setLabels(labels)
+
+                console.log("new value", new_value)
+                console.log("new modes", new_modes)
+
+
+            })
+
 
         // })
     }

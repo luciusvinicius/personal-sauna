@@ -117,14 +117,14 @@ const get_jumps = (modes, temperatures, prices) => {
 }
 
 
-export const algorithm = async (start_day, end_day) => { 
-    let ret = {};
+export const getData = async (start_day, end_day) => {
+    let ret = [];
     for (let i = start_day; i <= end_day; i++) {
-        console.log(`calculating day ${i}`)
+        // console.log(`calculating day ${i}`)
         let temperatures = await get_day_temp(i)
         let prices = [185.90 ,150.00 ,127.50 ,114.60 ,114.10 ,111.10 ,112.60 ,114.50 ,125.02 ,131.97 ,141.80 ,138.00 ,115.60 ,124.99 ,125.02 ,143.00 ,141.00 ,156.17 ,186.03 ,193.15 ,187.95 ,182.30 ,175.12 ,140.38]
         let modes = initialize(temperatures)
-        console.log(temperatures)
+        // console.log(temperatures)
         let count = 0
         while(get_comfort(modes) < 124){
             count++
@@ -141,10 +141,11 @@ export const algorithm = async (start_day, end_day) => {
             }
         }
         let day = {};
+        day.date = i
         day["modes"] = modes
         day["temps"] = temperatures
         day["comf"] = []
-        day["comf_bool"] = {}
+        day["modes_bool"] = {}
         let eco = []
         let comf = []
         let off = []
@@ -168,9 +169,9 @@ export const algorithm = async (start_day, end_day) => {
                 off.push(0)
             }
         })
-        day["comf_bool"]["eco"] = eco
-        day["comf_bool"]["comf"] = comf
-        day["comf_bool"]["off"] = off
+        day["modes_bool"]["eco"] = eco
+        day["modes_bool"]["comf"] = comf
+        day["modes_bool"]["off"] = off
         day["consumo"] = []
         day["cost"] = []
         for (let j = 0; j < 24; j++) {
@@ -214,9 +215,9 @@ export const algorithm = async (start_day, end_day) => {
                 }
             }
         }
-        ret[i] = day
+        ret.push(day)
     }
-    console.log("AAAAAAAA")
-    console.log(ret)
+    // console.log("AAAAAAAA")
+    // console.log(ret)
     return ret
 }

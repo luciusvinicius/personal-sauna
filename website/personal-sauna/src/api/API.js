@@ -13,7 +13,7 @@ const lat = 41.8061;
 const long = -6.7567;
 
 export const get_day_temp = async (day) => {
-    console.log(`get temperatures for day ${day}`)
+    // console.log(`get temperatures for day ${day}`)
     const temps = []
     const day_1 = 1638316800
     const init = day_1 + (day-1)*day_ts
@@ -28,7 +28,7 @@ export const get_day_temp = async (day) => {
 
     if (response.ok) { 
         let json = await response.json();
-        console.log(json)
+        // console.log(json)
         json.list.forEach(element => {
             temps.push(element.main.temp-273.15)
         });
