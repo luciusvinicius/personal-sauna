@@ -14,7 +14,7 @@ const FormInputDropdown = ({name, control, label, options=[]}) => {
             render={({ field: { onChange, value } }) => (
                 <FormControl fullWidth>
                     <InputLabel>{label}</InputLabel>
-                    <Select onChange={onChange} value={value}>
+                    <Select label={label} onChange={onChange} value={value}>
                         {options.map((option) => {
                             return (
                                 <MenuItem key={option.value} value={option.value}>

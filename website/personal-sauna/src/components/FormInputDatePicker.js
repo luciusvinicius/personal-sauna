@@ -18,7 +18,7 @@ export const FormInputDatePicker = ({name, label, control}) => {
                         label={label}
                         value={value}
                         onChange={onChange}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                 </LocalizationProvider>
             )}
