@@ -24,6 +24,10 @@ const ShowData = () => {
             :
             <Graph
                 labels={labels}
+                offs={offs}
+                ecos={ecos}
+                comforts={comforts}
+                values={values}
             />
         )
     }

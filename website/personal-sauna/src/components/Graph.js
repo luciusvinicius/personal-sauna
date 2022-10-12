@@ -33,6 +33,24 @@ import {
 //     },
 // };
 
+const options = {
+    responsive: true,
+
+    plugins: {
+        legend: {
+            position: 'top',
+        },
+        title: {
+            display: true,
+            text: 'Chart.js Combined Line/Bar Chart'
+        }
+    },
+    scales: {
+        x: {
+            stacked: true}
+    }
+}
+
 ChartJS.register(
     LinearScale,
     CategoryScale,
@@ -48,33 +66,51 @@ ChartJS.register(
 // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
 
+const filterQuantity = (arr, labels, mult, min_val) => {
+    return arr.slice(0, labels.length).map((v) => v !== 0 ? [min_val, v * mult] : v * mult)
+}
 
-const Graph = ({labels = []}) => {
+const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
+
+    const max_val = 7
+    const min_val = -1
+    console.log("values", values)
+    console.log(max_val)
+    const comforts_slice = filterQuantity(comforts, labels, max_val, min_val)
+    const offs_slice = filterQuantity(offs, labels, max_val, min_val)
+    const ecos_slice = filterQuantity(ecos, labels, max_val, min_val)
+
 
     const data = {
         labels,
         datasets: [
             {
                 type: 'line',
-                label: 'Dataset 1',
+                label: 'Temperature',
                 borderColor: 'rgb(255, 99, 132)',
                 borderWidth: 2,
                 fill: false,
-                data: labels.map(() => 100),
+                data: labels.map((_, i) => values[i]),
             },
             {
                 type: 'bar',
-                label: 'Dataset 2',
-                backgroundColor: 'rgb(75, 192, 192, 0.2)',
-                data: labels.map(() => 50),
+                label: 'Offs',
+                backgroundColor: 'rgb(230, 230, 30, 0.3)',
+                data: offs_slice,
                 borderColor: 'white',
                 borderWidth: 2,
             },
             {
                 type: 'bar',
-                label: 'Dataset 3',
-                backgroundColor: 'rgb(53, 162, 235, 0.2)',
-                data: labels.map(() => 30),
+                label: 'Comforts',
+                backgroundColor: 'rgb(10, 60, 235, 0.3)',
+                data: comforts_slice,
+            },
+            {
+                type: 'bar',
+                label: 'Ecos',
+                backgroundColor: 'rgb(30, 230, 30, 0.3)',
+                data: ecos_slice,
             },
         ],
     };
@@ -83,22 +119,7 @@ const Graph = ({labels = []}) => {
     return (
         <>
             <Chart
-                options={{
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Chart.js Combined Line/Bar Chart'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            stacked: true}
-                    }
-                }}
+                options={options}
                 type={"bar"}
                 data={data}/>
         </>
