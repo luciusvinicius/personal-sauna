@@ -42,16 +42,19 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
 
     return (
         <>
-            <form>
-                <Row>
-                    <Col xs={6}>
+            <form className="pl-5 pt-5">
+                <Row className="justify-content-md-center">
+                    <Col xs={8} className="pl-5">
                         <FormInputDatePicker
                             name={"start_date"}
                             label={"Starting date"}
                             control={control}
                         />
                     </Col>
-                    <Col xs={6}>
+                </Row>
+                <br/>
+                <Row className="justify-content-md-center">
+                    <Col xs={8}>
                         <FormInputDatePicker
                             name={"end_date"}
                             label={"Ending date"}
@@ -60,8 +63,8 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                     </Col>
                 </Row>
                 <br/>
-                <Row>
-                    <Col xs={6}>
+                <Row className="justify-content-md-center">
+                    <Col xs={8}>
                         <FormInputDropdown
                             name={"period"}
                             label={"Period"}
@@ -69,7 +72,10 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                             options={periods}
                         />
                     </Col>
-                    <Col xs={6}>
+                </Row>
+                <br/>
+                <Row className="justify-content-md-center">
+                    <Col xs={8}>
                         <FormInputDropdown
                             name={"parameter"}
                             label={"Parameter"}
@@ -80,9 +86,18 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                 </Row>
 
                 <br/>
-
-                <Button variant={"contained"} color={"success"} onClick={handleSubmit(onSubmit)}>Submit</Button>
-                <Button style={{marginLeft: "1em"}} onClick={() => reset()} variant={"outlined"}>Reset</Button>
+                <Row className="justify-content-md-center">
+                    <Col xs={3}></Col>
+                    <Col xs={3}>
+                        <Button variant={"contained"} color={"success"} onClick={handleSubmit(onSubmit)}>Submit</Button>
+                    </Col>
+                    <Col xs={3}>
+                        <Button style={{marginLeft: "1em"}} onClick={() => reset()} variant={"outlined"}>Reset</Button>
+                    </Col>
+                    <Col xs={3}></Col>
+                    
+                </Row>
+                
             </form>
         </>
     )
