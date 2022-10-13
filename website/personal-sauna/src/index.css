@@ -12,3 +12,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.form-check-input:checked {
+  background-color: red;
+  border-color: pink;
+}

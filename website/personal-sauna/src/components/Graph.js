@@ -24,7 +24,7 @@ const generateOptions = (title="", isHourly=false) => {
             },
             title: {
                 display: true,
-                text: title
+                text: `${title} in relation to time.`
             }
         },
         scales: {
@@ -45,7 +45,7 @@ const generateOptions = (title="", isHourly=false) => {
                 position: "right",
                 title: {
                     display: true,
-                    text: "Parameter Value"
+                    text: title
                 },
                 grid: {
                     //lineWidth: isHourly ? 1 : 3,
@@ -97,7 +97,8 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
     // const new_labels = labels.map(label => label.getYear())
 
     // console.log("labels", labels)
-    console.log("STEP", stepped)
+    // console.log("STEP", stepped)
+
     const data = {
         labels,
         datasets: [
@@ -108,42 +109,13 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
                 borderWidth: 2,
                 fill: false,
                 data: labels.map((_, i) => values[i]),
-                stepped: stepped
-            },
-            {
-                type: 'bar',
-                label: 'Off %',
-                backgroundColor: 'rgb(30, 30, 30, 0.3)',
-                data: offs_slice,
-                yAxisID: 'type_y',
-                barThickness: 'flex',
-                barPercentage: 1,
-                categoryPercentage: 1,
-            },
-            {
-                type: 'bar',
-                label: 'Comfort %',
-                backgroundColor: 'rgb(10, 60, 235, 0.3)',
-                data: comforts_slice,
-                yAxisID: 'type_y',
-                barThickness: 'flex',
-                barPercentage: 1,
-                categoryPercentage: 1,
-            },
-            {
-                type: 'bar',
-                label: 'Eco %',
-                backgroundColor: 'rgb(30, 230, 30, 0.3)',
-                data: ecos_slice,
-                yAxisID: 'type_y',
-                barThickness: 'flex',
-                barPercentage: 1,
-                categoryPercentage: 1,
+                stepped: stepped,
+
             },
         ],
     };
 
-    if (values2.length != 0){
+    if (values2.length !== 0){
         data.datasets.push({
             type: 'line',
             label: title2,
@@ -151,9 +123,42 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
             borderWidth: 2,
             fill: false,
             data: labels.map((_, i) => values2[i]),
-            stepped: stepped
+            stepped: stepped,
         })
     }
+
+    data.datasets = data.datasets.concat([
+        {
+            type: 'bar',
+            label: 'Off %',
+            backgroundColor: 'rgb(30, 30, 30, 0.3)',
+            data: offs_slice,
+            yAxisID: 'type_y',
+            barThickness: 'flex',
+            barPercentage: 1,
+            categoryPercentage: 1,
+        },
+        {
+            type: 'bar',
+            label: 'Comfort %',
+            backgroundColor: 'rgb(10, 60, 235, 0.3)',
+            data: comforts_slice,
+            yAxisID: 'type_y',
+            barThickness: 'flex',
+            barPercentage: 1,
+            categoryPercentage: 1,
+        },
+        {
+            type: 'bar',
+            label: 'Eco %',
+            backgroundColor: 'rgb(30, 230, 30, 0.3)',
+            data: ecos_slice,
+            yAxisID: 'type_y',
+            barThickness: 'flex',
+            barPercentage: 1,
+            categoryPercentage: 1,
+        }
+    ])
 
 
     return (

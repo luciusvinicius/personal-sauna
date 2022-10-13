@@ -27,6 +27,7 @@ const ShowData = () => {
     const [cum_energy_cost, setCum_Energy_Cost] = useState([])
     const [cum_energy_cost_norm, setCum_Energy_Cost_Norm] = useState([])
 
+    const [cumComf, setCumComf] = useState([])
     const [cost_diff, setCost_Diff] = useState([])
 
 
@@ -54,40 +55,38 @@ const ShowData = () => {
                 :
                 <>
                     <Row>
-                        <Col xl={6} md={12}>
+                        <Col xl={6} md={12} className="pt-4">
                             {
-                                show_graph(temperature,'Temperature')
+                                show_graph(energy_cost, 'Energy Cost (€)', energy_cost_norm, 'Standard Energy Cost (€)')
                             }
                         </Col>
-                        <Col xl={6} md={12}>
+                        <Col xl={6} md={12} className="pt-4">
                             {
-                                show_graph(temperature)
-                            }
-                        </Col>
-                    </Row>
-                    <br></br>
-                    <Row>
-                        <Col xl={6} md={12}>
-                            {
-                                show_graph(energy_comsumption, 'Energy Consumption', energy_comsumption_norm, 'Normal energy Consumption')
-                            }
-                        </Col>
-                        <Col xl={6} md={12}>
-                            {
-                                show_graph(cum_energy_comsumption, 'Energy Consumption Cumulative', cum_energy_comsumption_norm, 'Normal Energy Consumption Cumulative', true)
+                                show_graph(cum_energy_cost, 'Cumulative Energy Cost (€)', cum_energy_cost_norm, 'Standard Cumulative Energy Cost (€)', true)
                             }
                         </Col>
                     </Row>
-                    <br></br>
                     <Row>
-                        <Col xl={6} md={12}>
+                        <Col xl={6} md={12} className="pt-4">
                             {
-                                show_graph(energy_cost, 'Energy Cost', energy_cost_norm, 'Normal Energy Cost')
+                                show_graph(energy_comsumption, 'Energy Consumption (kWh)', energy_comsumption_norm, 'Standard Energy Consumption (kWh)')
                             }
                         </Col>
-                        <Col xl={6} md={12}>
+                        <Col xl={6} md={12} className="pt-4">
                             {
-                                show_graph(cum_energy_cost, 'Energy Cost Cumulative', cum_energy_cost_norm, 'Normal Energy Cost Cumulative', true)
+                                show_graph(cum_energy_comsumption, 'Cumulative Energy Consumption (kWh)', cum_energy_comsumption_norm, 'Standard Cumulative Energy Consumption (kWh)', true)
+                            }
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xl={6} md={12} className="pt-4">
+                            {
+                                show_graph(temperature,'Temperature (Cº)')
+                            }
+                        </Col>
+                        <Col xl={6} md={12} className="pt-4">
+                            {
+                                show_graph(cumComf, "Cumulative Comfort")
                             }
                         </Col>
                     </Row>
@@ -126,16 +125,18 @@ const ShowData = () => {
 
     return (
         <Container fluid >
-            <br/>
-            <br/>
             <Row>
-                <Col xl={2} md={4} className="pl-5 pt-5">
+                <Col xl={2} md={4} className="pt-4">
                     <Row>
-                        <Col lx={4}>
-                            <Card style={{minHeight:"200px", maxWidth:"200px"}}>
-                                <p>{cost_diff}</p>
-                            </Card>
-                        </Col>
+                        <Card className="text-center p-0" style={{borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px'}}>
+                            <Card.Header>Profit gain</Card.Header>
+                            <br></br>
+                            <Card.Body className="justify-content-md-center">
+                                <Card.Title>
+                                    {Math.round(cost_diff * 100) / 100} €
+                                </Card.Title>
+                            </Card.Body>
+                        </Card>
                     </Row>
                     <br></br>
                     <br></br>
@@ -157,6 +158,7 @@ const ShowData = () => {
                             setCum_Energy_Cons_Norm = {setCum_Energy_Cons_Norm}
                             setCum_Energy_Cost_Norm = {setCum_Energy_Cost_Norm} 
                             setCost_Diff = {setCost_Diff}
+                            setCumComf={setCumComf}
                         />
                     </Row>
                     

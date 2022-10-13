@@ -9,7 +9,7 @@ import { get_day_prices } from '../api/API';
 const initialize = (temperatures) => {
     const sol = [];
     temperatures.forEach(temp => {
-        sol.push(temp > 10 ? "eco" : "off");
+        sol.push("off");
     });
     return sol
 }
@@ -85,33 +85,42 @@ const get_jumps = (modes, temperatures, prices) => {
         const mode = modes[i]
         const temp = temperatures[i]
         const price = prices[i]
-        let cost = 0
-        let gain = 0
-        if (mode == "off"){ // off -> eco
-            cost = 0.6
-            gain = 4
+        if(mode === "off") {
+            let cost_eco = 0;
+            let cost_comf = 0;
+            if (temp < 0) {
+                cost_eco = 0.6
+                cost_comf = 10.4 
+            }
+            else if (temp < 10) {
+                cost_eco = 0.6
+                cost_comf = 1.4
+            }
+            else if (temp < 20) {
+                cost_eco = -0.2
+                cost_comf = 0.6
+            }
+            else {
+                cost_eco = -0.6
+                cost_comf = -0.2
+            }
+            jump_cost.push([cost_eco*price/4,i,"eco"])
+            jump_cost.push([cost_comf*price/8,i,"comf"])
         }
-        else if (mode == "eco"){
-            gain = 4
-            if (temp < 0){
+        else if(mode === "eco") {
+            let cost = 0;
+            if (temp < 0) {
                 cost = 9.8
             }
-            else if (temp < 10){
-                cost = 0.8
-            }
-            else if (temp < 20){
+            else if (temp < 20) {
                 cost = 0.8
             }
             else {
                 cost = 0.4
-            }      
+            }
+            jump_cost.push([cost*price/4,i,"comf"])
         }
-        else if (mode == "comf"){
-            cost = 100000000000
-            gain = 1
-        }    
-        //console.log(cost + " " + price + " " + gain + " " + cost*price/gain)  
-        jump_cost.push(cost*price/gain)
+        
     }
         
     return jump_cost
@@ -139,21 +148,15 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
                 modes.push("eco")
             }
         }
-        let count = 0
+
         while(get_comfort(modes) < comf_score){
-            count++
             let jumps = get_jumps(modes, temperatures, prices)
-            let min_hour = jumps.indexOf(Math.min(...jumps))
-            if (modes[min_hour] === "off"){
-                modes[min_hour] = "eco"
-            }
-            else if (modes[min_hour] === "eco"){
-                modes[min_hour] = "comf"
-            }        
-            else if (modes[min_hour] === "comf"){
-                break
-            }
+            let minJump = jumps.reduce(function(prev, curr) {
+                return prev[0] < curr[0] ? prev : curr;
+            });
+            modes[minJump[1]] = minJump[2]
         }
+
         let day = {};
         day.date = i
         day["modes"] = modes
