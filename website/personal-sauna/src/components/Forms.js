@@ -16,16 +16,15 @@ import {
 } from "../helpers";
 
 import Card from 'react-bootstrap/Card';
+import FormInputSlider from "./FormInputSlider";
 
 const STARTING_DATE = "2021-12-01T00:00:00Z"
 const ENDING_DATE = "2021-12-31T00:00:00Z"
 const STARTING_PERIOD = 24
 const STARTING_PARAMETER = "external_temp"
-
-
-
-
-
+const MIN_COMF = 0
+const MAX_COMF = 194
+const STARTING_COMF = 124
 
 const Forms = ({
     setLabels,
@@ -52,7 +51,8 @@ const Forms = ({
             start_date: STARTING_DATE,
             end_date: ENDING_DATE,
             period: STARTING_PERIOD,
-            parameter: STARTING_PARAMETER
+            parameter: STARTING_PARAMETER,
+            comf_slider: STARTING_COMF
         }
     });
 
@@ -63,7 +63,7 @@ const Forms = ({
         let start_date = new Date(data.start_date)
         let end_date = new Date(data.end_date)
 
-        getData(start_date, end_date)
+        getData(start_date, end_date,true ,data.comf_slider)
             .then(response => {
                 console.log("sussy response", response)
                 let values = []
@@ -174,11 +174,12 @@ const Forms = ({
                 <br/>
                 <Row className="justify-content-md-center">
                     <Col xs={8}>
-                        <FormInputDropdown
-                            name={"parameter"}
-                            label={"Parameter"}
+                        <FormInputSlider
+                            name={"comf_slider"}
+                            label={"Minimum Comfort Score"}
                             control={control}
-                            options={parameters}
+                            min={MIN_COMF}
+                            max={MAX_COMF}
                         />
                     </Col>
                 </Row>
