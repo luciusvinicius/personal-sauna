@@ -27,8 +27,8 @@ const ShowData = () => {
     const [cum_energy_cost, setCum_Energy_Cost] = useState([])
     const [cum_energy_cost_norm, setCum_Energy_Cost_Norm] = useState([])
 
-    const [comf, setComf] = useState([])
     const [cumComf, setCumComf] = useState([])
+    const [cost_diff, setCost_Diff] = useState([])
 
 
 
@@ -62,7 +62,7 @@ const ShowData = () => {
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(comf, "Comfort")
+                                show_graph(cumComf, "Comfort Cumulative")
                             }
                         </Col>
                     </Row>
@@ -75,7 +75,7 @@ const ShowData = () => {
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(cum_energy_comsumption, 'Energy Consumption Cumulative', cum_energy_comsumption_norm, 'Normal Energy Consumption Cumulative')
+                                show_graph(cum_energy_comsumption, 'Energy Consumption Cumulative', cum_energy_comsumption_norm, 'Normal Energy Consumption Cumulative', true)
                             }
                         </Col>
                     </Row>
@@ -88,7 +88,7 @@ const ShowData = () => {
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(cum_energy_cost, 'Energy Cost Cumulative', cum_energy_cost_norm, 'Normal Energy Cost Cumulative')
+                                show_graph(cum_energy_cost, 'Energy Cost Cumulative', cum_energy_cost_norm, 'Normal Energy Cost Cumulative', true)
                             }
                         </Col>
                     </Row>
@@ -96,7 +96,7 @@ const ShowData = () => {
         )
     }
 
-    const show_graph = (val, title, values2=[], title2='') => {
+    const show_graph = (val, title, values2=[], title2='', stepped=false) => {
         return (
             <Graph
                 labels={labels}
@@ -109,6 +109,7 @@ const ShowData = () => {
                 title={title}
                 values2={values2}
                 title2={title2}
+                stepped={stepped}
             />
         )
     }
@@ -130,25 +131,37 @@ const ShowData = () => {
             <br/>
             <Row>
                 <Col xl={2} md={4} className="pl-5 pt-5">
-                    <Forms
-                        setLabels={setLabels}
-                        setOffs={setOffs}
-                        setEcos={setEcos}
-                        setComforts={setComforts}
-                        setIsLoading={setIsLoading}
-                        setTemperature={setTemperature}
-                        setIsHourly={setIsHourly}
-                        setEnergy_Cons={setEnergy_Cons}
-                        setCum_Energy_Cons={setCum_Energy_Cons}
-                        setEnergy_Cons_Norm = {setEnergy_Cons_Norm}
-                        setEnergy_Cost = {setEnergy_Cost}
-                        setEnergy_Cost_Norm = {setEnergy_Cost_Norm}
-                        setCum_Energy_Cost = {setCum_Energy_Cost}
-                        setCum_Energy_Cons_Norm = {setCum_Energy_Cons_Norm}
-                        setCum_Energy_Cost_Norm = {setCum_Energy_Cost_Norm}
-                        setComf={setComf}
-                        setCumComf={setCumComf}
-                    />
+                    <Row>
+                        <Col lx={4}>
+                            <Card style={{minHeight:"200px", maxWidth:"200px"}}>
+                                <p>{cost_diff}</p>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <br></br>
+                    <br></br>
+                    <Row>
+                        <Forms
+                            setLabels={setLabels}
+                            setOffs={setOffs}
+                            setEcos={setEcos}
+                            setComforts={setComforts}
+                            setIsLoading={setIsLoading}
+                            setTemperature={setTemperature}
+                            setIsHourly={setIsHourly}
+                            setEnergy_Cons={setEnergy_Cons}
+                            setCum_Energy_Cons={setCum_Energy_Cons}
+                            setEnergy_Cons_Norm = {setEnergy_Cons_Norm}
+                            setEnergy_Cost = {setEnergy_Cost}
+                            setEnergy_Cost_Norm = {setEnergy_Cost_Norm}
+                            setCum_Energy_Cost = {setCum_Energy_Cost}
+                            setCum_Energy_Cons_Norm = {setCum_Energy_Cons_Norm}
+                            setCum_Energy_Cost_Norm = {setCum_Energy_Cost_Norm} 
+                            setCost_Diff = {setCost_Diff}
+                            setCumComf={setCumComf}
+                        />
+                    </Row>
+                    
                 </Col>
             
                 <Col xl={10} md={8}>

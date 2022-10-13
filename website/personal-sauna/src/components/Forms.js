@@ -43,8 +43,8 @@ const Forms = ({
     setCum_Energy_Cost,
     setCum_Energy_Cons_Norm,
     setCum_Energy_Cost_Norm,
-    setComf,
     setCumComf,
+    setCost_Diff
     }) => {
 
     const {handleSubmit, reset, control} = useForm({
@@ -75,30 +75,34 @@ const Forms = ({
                 let energy_consumption_norm = []
                 let energy_cost = []
                 let energy_cost_norm = []
+                let cost_diff = []
+                let comfs_total = []
                 response.map(day => {
                     values = values.concat(day.temps)
                     ecos = ecos.concat(day.modes_bool.eco)
                     comfs = comfs.concat(day.modes_bool.comf)
+                    comfs_total = comfs_total.concat(day.comf)
                     offs = offs.concat(day.modes_bool.off)
                     labels = labels.concat(day.date)
                     energy_consumption = energy_consumption.concat(day.consumo)
                     energy_consumption_norm = energy_consumption_norm.concat(day.consumo_normal)
                     energy_cost = energy_cost.concat(day.cost)
                     energy_cost_norm = energy_cost_norm.concat(day.cost_normal)
+                    cost_diff = cost_diff.concat(day.cost_diff)
                 })
 
                 const new_temperature = getAvgByPeriod(data.period, values)
                 const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
                 const new_labels = filterLabelByPeriod(data.period, labels)
+                const new_cost_diff = cost_diff.reduce((partialSum, a) => partialSum + a, 0);
 
                 const new_energy_consumption = getSumByPeriod(data.period, energy_consumption)
                 const new_energy_consumption_norm = getSumByPeriod(data.period, energy_consumption_norm)
                 const new_energy_cost = getSumByPeriod(data.period, energy_cost)
                 const new_energy_cost_norm = getSumByPeriod(data.period, energy_cost_norm)
 
-                console.log("comfs", comfs)
-                const new_comf = getSumByPeriod(data.period, comfs)
-
+                let cum_comf = getSumByPeriod(data.period, comfs_total)
+                cum_comf = generate_cumulative(cum_comf)
 
                 let cum_ene_con = getSumByPeriod(data.period, energy_consumption)
                 cum_ene_con = generate_cumulative(cum_ene_con)
@@ -115,7 +119,7 @@ const Forms = ({
                 setComforts(new_modes.comfs)
                 setLabels(new_labels)
                 setIsHourly(data.period === 1)
-                setComf(new_comf)
+                setCumComf(cum_comf)
 
                 setEnergy_Cons(new_energy_consumption)
                 setCum_Energy_Cons(cum_ene_con)
@@ -125,6 +129,8 @@ const Forms = ({
                 setCum_Energy_Cost(cum_ene_cost)
                 setEnergy_Cost_Norm(new_energy_cost_norm)
                 setCum_Energy_Cost_Norm(cum_ene_cost_norm)
+
+                setCost_Diff(new_cost_diff)
 
                 setIsLoading(false)
             })

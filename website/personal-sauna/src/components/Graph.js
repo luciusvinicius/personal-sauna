@@ -30,20 +30,27 @@ const generateOptions = (title="", isHourly=false) => {
         scales: {
             x: {
                 grid: {
-                    lineWidth: isHourly ? 1 : 3,
-                    drawOnChartArea: !isHourly
+                    //lineWidth: isHourly ? 1 : 3,
+                    drawOnChartArea: !isHourly,
+                    display: false
                 },
                 title: {
                     display: true,
                     text: "Time"
                 },
-                stacked: isHourly
+                stacked: isHourly,
+
             },
             y: {
                 position: "right",
                 title: {
                     display: true,
                     text: title
+                },
+                grid: {
+                    //lineWidth: isHourly ? 1 : 3,
+                    drawOnChartArea: !isHourly,
+                    display: true
                 },
             },
             type_y: {
@@ -76,7 +83,7 @@ const filterQuantity = (arr, labels, scale) => {
     return arr.slice(0, labels.length).map((v) => v/scale)
 }
 
-const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', isHourly=false, values2=[], title2=''}) => {
+const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', isHourly=false, values2=[], title2='', stepped=false}) => {
 
     if (offs.length === 0 || ecos.length === 0 || comforts.length === 0) {
         return <p>Loading</p>
@@ -90,6 +97,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
     // const new_labels = labels.map(label => label.getYear())
 
     // console.log("labels", labels)
+    // console.log("STEP", stepped)
     const data = {
         labels,
         datasets: [
@@ -100,6 +108,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
                 borderWidth: 2,
                 fill: false,
                 data: labels.map((_, i) => values[i]),
+                stepped: stepped
             },
         ],
     };
@@ -112,6 +121,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
             borderWidth: 2,
             fill: false,
             data: labels.map((_, i) => values2[i]),
+            stepped: stepped
         })
     }
 
