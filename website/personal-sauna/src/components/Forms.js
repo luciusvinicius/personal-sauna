@@ -7,7 +7,13 @@ import FormInputDropdown from "./FormInputDropdown";
 import {FormInputDatePicker} from "./FormInputDatePicker";
 import {periods, parameters} from "./FormOptions";
 import {getData} from "../algo/algotithm";
-import {filterLabelByPeriod, filterModesByPeriod, filterValueByPeriod, generate_cumulative} from "../helpers";
+import {
+    filterLabelByPeriod,
+    filterModesByPeriod,
+    getSumByPeriod,
+    generate_cumulative,
+    getAvgByPeriod
+} from "../helpers";
 
 import Card from 'react-bootstrap/Card';
 
@@ -79,28 +85,26 @@ const Forms = ({
                     energy_cost_norm = energy_cost_norm.concat(day.cost_normal)
                 })
 
-
-                const new_value = filterValueByPeriod(data.period, values)
-                console.log("new val", new_value)
+                const new_temperature = getAvgByPeriod(data.period, values)
                 const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
                 const new_labels = filterLabelByPeriod(data.period, labels)
 
-                const new_energy_consumption = filterValueByPeriod(data.period, energy_consumption)
-                const new_energy_consumption_norm = filterValueByPeriod(data.period, energy_consumption_norm)
-                const new_energy_cost = filterValueByPeriod(data.period, energy_cost)
-                const new_energy_cost_norm = filterValueByPeriod(data.period, energy_cost_norm)
+                const new_energy_consumption = getSumByPeriod(data.period, energy_consumption)
+                const new_energy_consumption_norm = getSumByPeriod(data.period, energy_consumption_norm)
+                const new_energy_cost = getSumByPeriod(data.period, energy_cost)
+                const new_energy_cost_norm = getSumByPeriod(data.period, energy_cost_norm)
 
 
-                let cum_ene_con = filterValueByPeriod(data.period, energy_consumption)
+                let cum_ene_con = getSumByPeriod(data.period, energy_consumption)
                 cum_ene_con = generate_cumulative(cum_ene_con)
-                let cum_ene_con_norm = filterValueByPeriod(data.period, energy_consumption_norm)
+                let cum_ene_con_norm = getSumByPeriod(data.period, energy_consumption_norm)
                 cum_ene_con_norm = generate_cumulative(cum_ene_con_norm)
-                let cum_ene_cost = filterValueByPeriod(data.period, energy_cost)
+                let cum_ene_cost = getSumByPeriod(data.period, energy_cost)
                 cum_ene_cost = generate_cumulative(cum_ene_cost)
-                let cum_ene_cost_norm = filterValueByPeriod(data.period, energy_cost_norm)
+                let cum_ene_cost_norm = getSumByPeriod(data.period, energy_cost_norm)
                 cum_ene_cost_norm = generate_cumulative(cum_ene_cost_norm)
 
-                setTemperature(new_value)
+                setTemperature(new_temperature)
                 setOffs(new_modes.offs)
                 setEcos(new_modes.ecos)
                 setComforts(new_modes.comfs)

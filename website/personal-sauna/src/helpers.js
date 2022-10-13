@@ -31,7 +31,7 @@ export const filterModesByPeriod = (period = 1, ecos = [], comfs = [], offs = []
     }
 }
 
-export const filterValueByPeriodOutdated = (period = 1, values = []) => {
+export const getAvgByPeriod = (period = 1, values = []) => {
     let new_val = []
 
     if (period === 1) {
@@ -55,17 +55,15 @@ export const filterValueByPeriodOutdated = (period = 1, values = []) => {
         new_val[idx] += values[i]
     }
 
-    if (i%period !== 0) {
-        // console.log("before final", new_val)
-        // console.log("idx", idx, "i", i)
-        new_val[idx] /= i%period
+    if (!hadLastDivision) {
+        new_val[idx] /= (i-1)%period
     }
 
     return new_val
 
 }
 
-export const filterValueByPeriod = (period = 1, values = []) => {
+export const getSumByPeriod = (period = 1, values = []) => {
     let new_val = []
 
     if (period === 1) {
@@ -73,7 +71,6 @@ export const filterValueByPeriod = (period = 1, values = []) => {
     }
 
     let idx = 0
-    let hadLastDivision = false
     let i
     for (i = 0; i < values.length; i++) {
         idx = Math.floor(i / period)
