@@ -16,8 +16,17 @@ const ShowData = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [temperature, setTemperature] = useState([])
     const [isHourly, setIsHourly] = useState(false)
+
     const [energy_comsumption, setEnergy_Cons] = useState([])
-    const [cumEnergyCost, setCumEnergyCost] = useState([])
+    const [energy_comsumption_norm, setEnergy_Cons_Norm] = useState([])
+    const [cum_energy_comsumption, setCum_Energy_Cons] = useState([])
+    const [cum_energy_comsumption_norm, setCum_Energy_Cons_Norm] = useState([])
+
+    const [energy_cost, setEnergy_Cost] = useState([])
+    const [energy_cost_norm, setEnergy_Cost_Norm] = useState([])
+    const [cum_energy_cost, setCum_Energy_Cost] = useState([])
+    const [cum_energy_cost_norm, setCum_Energy_Cost_Norm] = useState([])
+
 
 
     const graph_or_text = () => {
@@ -55,12 +64,24 @@ const ShowData = () => {
                     <Row>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(energy_comsumption, 'Energy Consumption')
+                                show_graph(energy_comsumption, 'Energy Consumption', energy_comsumption_norm, 'Normal energy Consumption')
                             }
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(cumEnergyCost, "Accumulate Energy Cost")
+                                show_graph(cum_energy_comsumption, 'Energy Consumption Cumulative', cum_energy_comsumption_norm, 'Normal Energy Consumption Cumulative')
+                            }
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(energy_cost, 'Energy Cost', energy_cost_norm, 'Normal Energy Cost')
+                            }
+                        </Col>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(cum_energy_cost, 'Energy Cost Cumulative', cum_energy_cost_norm, 'Normal Energy Cost Cumulative')
                             }
                         </Col>
                     </Row>
@@ -68,7 +89,7 @@ const ShowData = () => {
         )
     }
 
-    const show_graph = (val, title) => {
+    const show_graph = (val, title, values2=[], title2='') => {
         return (
             <Graph
                 labels={labels}
@@ -79,6 +100,8 @@ const ShowData = () => {
                 isHourly={isHourly}
                 values={val}
                 title={title}
+                values2={values2}
+                title2={title2}
             />
         )
     }
@@ -109,7 +132,13 @@ const ShowData = () => {
                         setTemperature={setTemperature}
                         setIsHourly={setIsHourly}
                         setEnergy_Cons={setEnergy_Cons}
-                        setCumEnergyCost={setCumEnergyCost}
+                        setCum_Energy_Cons={setCum_Energy_Cons}
+                        setEnergy_Cons_Norm = {setEnergy_Cons_Norm}
+                        setEnergy_Cost = {setEnergy_Cost}
+                        setEnergy_Cost_Norm = {setEnergy_Cost_Norm}
+                        setCum_Energy_Cost = {setCum_Energy_Cost}
+                        setCum_Energy_Cons_Norm = {setCum_Energy_Cons_Norm}
+                        setCum_Energy_Cost_Norm = {setCum_Energy_Cost_Norm} 
                     />
                 </Col>
             

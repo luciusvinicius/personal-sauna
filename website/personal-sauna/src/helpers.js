@@ -141,3 +141,21 @@ export const convertDateToString = (date, hasYear = true) => {
 
     return `${month}/${day}`
 }
+
+export const sumValueByPeriod = (period=1, values=[]) => {
+    let new_val = []
+    for (let i=0; i < period; i++){
+        new_val.push(0)
+    }
+    console.log(values)
+
+    let idx = 0
+    for (let i=0; i < values.length; i++) {
+        idx = Math.floor(i/period)
+        new_val[idx] += values[i]
+
+    }
+    console.log(new_val)
+    return new_val
+
+}
