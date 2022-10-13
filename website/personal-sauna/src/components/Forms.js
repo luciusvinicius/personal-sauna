@@ -17,6 +17,7 @@ import {
 
 import Card from 'react-bootstrap/Card';
 import FormInputSlider from "./FormInputSlider";
+import FormInputSwitch from "./FormInputSwitch";
 
 const STARTING_DATE = "2021-12-01T00:00:00Z"
 const ENDING_DATE = "2021-12-31T00:00:00Z"
@@ -25,6 +26,7 @@ const STARTING_PARAMETER = "external_temp"
 const MIN_COMF = 0
 const MAX_COMF = 194
 const STARTING_COMF = 124
+const STARTING_OFF = true
 
 const Forms = ({
     setLabels,
@@ -52,7 +54,8 @@ const Forms = ({
             end_date: ENDING_DATE,
             period: STARTING_PERIOD,
             parameter: STARTING_PARAMETER,
-            comf_slider: STARTING_COMF
+            comf_slider: STARTING_COMF,
+            off_input: STARTING_OFF
         }
     });
 
@@ -63,7 +66,7 @@ const Forms = ({
         let start_date = new Date(data.start_date)
         let end_date = new Date(data.end_date)
 
-        getData(start_date, end_date,true ,data.comf_slider)
+        getData(start_date, end_date, data.off_input ,data.comf_slider)
             .then(response => {
                 console.log("sussy response", response)
                 let values = []
@@ -180,6 +183,16 @@ const Forms = ({
                             control={control}
                             min={MIN_COMF}
                             max={MAX_COMF}
+                        />
+                    </Col>
+                </Row>
+                <Row className="justify-content-md-center">
+                    <Col xs={8}>
+                        <FormInputSwitch
+                            name={"off_input"}
+                            label={"Enable / Disable Off mode"}
+                            control={control}
+                            defaultChecked={STARTING_OFF}
                         />
                     </Col>
                 </Row>

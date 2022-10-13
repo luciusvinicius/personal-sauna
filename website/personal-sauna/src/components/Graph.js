@@ -98,6 +98,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
 
     // console.log("labels", labels)
     // console.log("STEP", stepped)
+
     const data = {
         labels,
         datasets: [
@@ -108,7 +109,8 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
                 borderWidth: 2,
                 fill: false,
                 data: labels.map((_, i) => values[i]),
-                stepped: stepped
+                stepped: stepped,
+
             },
         ],
     };
@@ -121,7 +123,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
             borderWidth: 2,
             fill: false,
             data: labels.map((_, i) => values2[i]),
-            stepped: stepped
+            stepped: stepped,
         })
     }
 
