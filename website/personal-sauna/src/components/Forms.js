@@ -69,6 +69,23 @@ const filterValueByPeriod = (period=1, values=[]) => {
     }
 
     return new_val
+}
+
+const sumValueByPeriod = (period=1, values=[]) => {
+    let new_val = []
+    for (let i=0; i < period; i++){
+        new_val.push(0)
+    }
+    console.log(values)
+
+    let idx = 0
+    for (let i=0; i < values.length; i++) {
+        idx = Math.floor(i/period)
+        new_val[idx] += values[i]
+
+    }
+    console.log(new_val)
+    return new_val
 
 }
 
@@ -76,7 +93,7 @@ const filterLabels = (period, days) => {
 
 }
 
-const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues, setEnergy_Cons}) => {
+const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues, setEnergy_Cons, setCum_Energy_Cons}) => {
 
     const {handleSubmit, reset, control} = useForm({
         defaultValues: {
@@ -124,18 +141,27 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                     energy_consumption = energy_consumption.concat(day.consumo)
                 })
 
+                const cumulativeSum = (sum => value => sum += value)(0);
+
                 const new_value = filterValueByPeriod(data.period, values)
                 const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
+                const new_energy_con = sumValueByPeriod(data.period, energy_consumption)
+
+                
+                const cum_ene_con = new_energy_con.map(cumulativeSum)
 
                 setValues(new_value)
                 setOffs(new_modes.offs)
                 setEcos(new_modes.ecos)
                 setComforts(new_modes.comfs)
                 setLabels(labels)
-                setEnergy_Cons(energy_consumption)
+                setEnergy_Cons(new_energy_con)
+                setCum_Energy_Cons(cum_ene_con)
 
                 console.log("new value", new_value)
                 console.log("new modes", new_modes)
+                console.log("ene_con", new_energy_con)
+                console.log("cum_ene_con", cum_ene_con)
 
 
             })

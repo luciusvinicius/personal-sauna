@@ -17,6 +17,7 @@ const ShowData = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [values, setValues] = useState([])
     const [energy_comsumption, setEnergy_Cons] = useState([])
+    const [cum_energy_comsumption, setCum_Energy_Cons] = useState([])
 
     const graph_or_text = (val, title) => {
         return (labels.length === 0 ?
@@ -58,6 +59,7 @@ const ShowData = () => {
                         setIsLoading={setIsLoading}
                         setValues={setValues}
                         setEnergy_Cons={setEnergy_Cons}
+                        setCum_Energy_Cons={setCum_Energy_Cons}
                     />
                 </Col>
             
@@ -98,7 +100,7 @@ const ShowData = () => {
                                     <CircularProgress/>
                                 </div>
                                 :
-                                graph_or_text(energy_comsumption)
+                                graph_or_text(cum_energy_comsumption)
                             }
                         </Col>
                     </Row>
