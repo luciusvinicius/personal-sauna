@@ -5,7 +5,7 @@ import {CircularProgress} from "@mui/material";
 import Graph from "../components/Graph";
 import "../css/index.css"
 import PieChart from "../components/PieChart";
-
+import Card from 'react-bootstrap/Card';
 
 const ShowData = () => {
 
@@ -32,7 +32,9 @@ const ShowData = () => {
     const graph_or_text = () => {
         return (labels.length === 0 && !isLoading ?
             <div className={"center-container"}>
-                <p>Please insert information on the form before :)</p>
+                <Card style={{minHeight:"400px", minWidth:"800px"}}>
+                <p className={"center-container"} style={{margin:"auto"}}>Please insert information on the form before :)</p>
+                </Card>
             </div>
             :
             loading_or_graph()

@@ -12,6 +12,7 @@ import {
     LineController,
     BarController,
 } from 'chart.js';
+import Card from 'react-bootstrap/Card';
 
 const generateOptions = (isHourly=false) => {
     return {
@@ -147,10 +148,12 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
 
     return (
         <>
+        <Card>
             <Chart
                 options={options}
                 type={"bar"}
                 data={data}/>
+        </Card>
         </>
     )
 }

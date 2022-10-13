@@ -1,16 +1,28 @@
 import './App.css';
 import ShowData from "./pages/ShowData";
+import Navbar from "./components/Navbar"
 
 import "./css/index.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { getData } from './algo/algotithm';
 
+
 function App() {
   return (
       <>
-        <h1 className={"title"}>Personal Sauna</h1>
+        <div
+          style={{
+            backgroundColor: '#F4F4F4',
+            backgroundSize: 'cover',
+            width: '100vw',
+            height: '100vh'
+          }}
+        >
+        
+        <Navbar/>
         <ShowData />
+        </div>
       </>
   );
 }
