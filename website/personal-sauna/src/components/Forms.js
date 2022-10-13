@@ -9,6 +9,7 @@ import {periods, parameters} from "./FormOptions";
 import {getData} from "../algo/algotithm";
 import {filterLabelByPeriod, filterModesByPeriod, filterValueByPeriod, generate_cumulative} from "../helpers";
 
+import Card from 'react-bootstrap/Card';
 
 const STARTING_DATE = "2021-12-01T00:00:00Z"
 const ENDING_DATE = "2021-12-31T00:00:00Z"
@@ -134,6 +135,7 @@ const Forms = ({
 
     return (
         <>
+        <Card style={{minHeight:"450px"}}>
             <form className="pl-5 pt-5">
                 <Row className="justify-content-md-center">
                     <Col xs={8} className="pl-5">
@@ -191,6 +193,7 @@ const Forms = ({
                 </Row>
 
             </form>
+        </Card>
         </>
     )
 }
