@@ -124,7 +124,7 @@ const getNextDay = (day) => {
 }
 
 
-export const getData = async (start_day, end_day) => {
+export const getData = async (start_day, end_day, off_flag = false) => {
     let ret = [];
     // console.log(start_day, end_day)
     for (let i = start_day; i <= end_day; i = getNextDay(i)) {
@@ -134,7 +134,16 @@ export const getData = async (start_day, end_day) => {
         let prices = await get_day_prices(i)
         console.log(temperatures)
         console.log(prices)
-        let modes = initialize(temperatures)
+        let modes;
+        if (off_flag) {
+            modes = initialize(temperatures)
+        }
+        else {
+            modes = []
+            for(let k = 0; k < 24; k++) {
+                modes.push("eco")
+            }
+        }
         // console.log(temperatures)
         let count = 0
         while(get_comfort(modes) < 124){
@@ -142,6 +151,7 @@ export const getData = async (start_day, end_day) => {
             let jumps = get_jumps(modes, temperatures, prices)
             let min_hour = jumps.indexOf(Math.min(...jumps))
             if (modes[min_hour] === "off"){
+                console.log("A")
                 modes[min_hour] = "eco"
             }
             else if (modes[min_hour] === "eco"){
@@ -228,6 +238,6 @@ export const getData = async (start_day, end_day) => {
         }
         ret.push(day)
     }
-    // console.log(ret)
+    console.log(ret)
     return ret
 }

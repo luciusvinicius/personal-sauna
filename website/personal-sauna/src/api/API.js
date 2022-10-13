@@ -15,7 +15,7 @@ const long = -6.7567;
 export const get_day_temp = async (day) => {
     const temps = []
     const day_1 = day.getTime()/1000
-    const final = day_1 + day*day_ts-1
+    const final = day_1 + day_ts - 1
 
     const options = {
         method: 'GET'
