@@ -7,6 +7,8 @@ import FormInputDropdown from "./FormInputDropdown";
 import {FormInputDatePicker} from "./FormInputDatePicker";
 import {periods, parameters} from "./FormOptions";
 import {getData} from "../algo/algotithm";
+import {filterLabelByPeriod, filterModesByPeriod, filterValueByPeriod, generate_cumulative} from "../helpers";
+
 import Card from 'react-bootstrap/Card';
 
 const STARTING_DATE = "2021-12-01T00:00:00Z"
@@ -14,155 +16,10 @@ const ENDING_DATE = "2021-12-31T00:00:00Z"
 const STARTING_PERIOD = 24
 const STARTING_PARAMETER = "external_temp"
 
-const filterModesByPeriod = (period = 1, ecos = [], comfs = [], offs = []) => {
 
-    if (period === 1) {
-        return {
-            ecos: ecos,
-            comfs: comfs,
-            offs: offs
-        }
-    }
 
-    let new_ecos = []
-    let new_comfs = []
-    let new_offs = []
 
-    for (let i = 0; i < ecos.length; i++) {
-        let idx = Math.floor(i / period)
-        if (idx >= new_ecos.length) {
-            new_ecos.push(0)
-            new_offs.push(0)
-            new_comfs.push(0)
-        }
-        new_ecos[idx] += ecos[i]
-        new_comfs[idx] += comfs[i]
-        new_offs[idx] += offs[i]
-    }
 
-    return {
-        ecos: new_ecos,
-        comfs: new_comfs,
-        offs: new_offs
-    }
-}
-
-const filterValueByPeriod = (period = 1, values = []) => {
-    let new_val = []
-
-    if (period === 1) {
-        return values
-    }
-
-    let idx = 0
-    let hadLastDivision = false
-    for (let i = 0; i < values.length; i++) {
-        idx = Math.floor(i / period)
-        hadLastDivision = false
-        if (idx >= new_val.length) {
-            new_val[idx - 1] = new_val[idx - 1] / period
-            hadLastDivision = true
-            new_val.push(0)
-        }
-        new_val[idx] += values[i]
-    }
-
-    if (!hadLastDivision) {
-        new_val[idx] /= period
-    }
-
-    return new_val
-}
-
-const sumValueByPeriod = (period=1, values=[]) => {
-    let new_val = []
-    for (let i=0; i < period; i++){
-        new_val.push(0)
-    }
-    console.log(values)
-
-    let idx = 0
-    for (let i=0; i < values.length; i++) {
-        idx = Math.floor(i/period)
-        new_val[idx] += values[i]
-
-    }
-    console.log(new_val)
-    return new_val
-
-}
-
-const filterLabelByPeriod = (period, labels) => {
-    const WEEK_SIZE = 7
-    let new_labels = []
-
-    switch (period) {
-        case 1: // hourly
-            for (const date of labels) {
-                for (let hour = 0; hour < 24; hour++) {
-                    let hour_str = hour + ""
-                    if (hour < 10) {
-                        hour_str = `0${hour}`
-                    }
-                    new_labels.push(`${convertDateToString(date, false)} - ${hour_str}:00`)
-                }
-            }
-            break
-        case 24: // daily
-            new_labels = labels.map(label => convertDateToString(label))
-            break
-
-        case 24 * 7: // weekly
-            if (labels.length === 0) break
-
-            let startDate = labels[0]
-            let str = convertDateToString(startDate, false)
-            let isCompleteWeek = true
-
-            for (let i = 0; i < labels.length; i++) {
-
-                let date = labels[i]
-                if (i % WEEK_SIZE === 0) {
-                    isCompleteWeek = false
-                    str = convertDateToString(date, false)
-                }
-
-                if (i % WEEK_SIZE === WEEK_SIZE - 1) { // last element on week
-                    isCompleteWeek = true
-                    str = `${str} - ${convertDateToString(date, false)}`
-                    new_labels.push(str)
-                    str = ""
-                }
-            }
-
-            if (!isCompleteWeek) {
-                str = `${str} - ${convertDateToString(labels[labels.length-1], false)}`
-                new_labels.push(str)
-            }
-
-            break
-    }
-
-    return new_labels
-}
-
-const convertDateToString = (date, hasYear = true) => {
-    let month = date.getMonth() + 1
-    let day = date.getDate()
-
-    if (month < 10) {
-        month = `0${month}`
-    }
-    if (day < 10) {
-        day = `0${day}`
-    }
-
-    if (hasYear) {
-        return `${date.getFullYear()}/${month}/${day}`
-    }
-
-    return `${month}/${day}`
-}
 
 const Forms = ({
     setLabels,
@@ -170,7 +27,7 @@ const Forms = ({
     setEcos, 
     setComforts, 
     setIsLoading, 
-    setValues, 
+    setTemperature, 
     setIsHourly, 
     setEnergy_Cons, 
     setCum_Energy_Cons,
@@ -222,45 +79,55 @@ const Forms = ({
                     energy_cost_norm = energy_cost_norm.concat(day.cost_normal)
                 })
 
-                const cumulativeSum = (sum => value => sum += value)(0);
+                // const cumulativeSum = (sum => value => sum += value)(0);
 
                 const new_value = filterValueByPeriod(data.period, values)
                 const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
                 const new_labels = filterLabelByPeriod(data.period, labels)
-                
-                const new_energy_con = sumValueByPeriod(data.period, energy_consumption)
-                const new_energy_con_norm = sumValueByPeriod(data.period, energy_consumption_norm)
-                const cum_ene_con = new_energy_con.map(cumulativeSum)
-                const cum_ene_con_norm = new_energy_con_norm.map(cumulativeSum)
-                
-                const new_energy_cost = sumValueByPeriod(data.period, energy_cost)
-                const new_energy_cost_norm = sumValueByPeriod(data.period, energy_cost_norm)
-                const cum_ene_cost = new_energy_cost.map(cumulativeSum)
-                const cum_ene_cost_norm = new_energy_cost_norm.map(cumulativeSum)
+                const new_energy_consumption = filterValueByPeriod(data.period, energy_consumption)
+                const new_energy_consumption_norm = filterValueByPeriod(data.period, energy_consumption_norm)
+                const new_energy_cost = filterValueByPeriod(data.period, energy_cost)
+                const new_energy_cost_norm = filterValueByPeriod(data.period, energy_cost_norm)
+
+
+                let cum_ene_con = generate_cumulative(energy_consumption)
+                cum_ene_con = filterValueByPeriod(data.period, cum_ene_con)
+                let cum_ene_con_norm = generate_cumulative(energy_consumption_norm)
+                cum_ene_con_norm = filterValueByPeriod(data.period, cum_ene_con_norm)
+                let cum_ene_cost = generate_cumulative(energy_cost)
+                cum_ene_cost = filterValueByPeriod(data.period, cum_ene_cost)
+                let cum_ene_cost_norm = generate_cumulative(energy_cost_norm)
+                cum_ene_cost_norm = filterValueByPeriod(data.period, cum_ene_cost_norm)
                 
 
-                setValues(new_value)
+                // const cum_ene_cost = new_energy_cost.map(cumulativeSum)
+                // const cum_ene_cost_norm = new_energy_cost_norm.map(cumulativeSum)
+                
+
+                setTemperature(new_value)
                 setOffs(new_modes.offs)
                 setEcos(new_modes.ecos)
                 setComforts(new_modes.comfs)
                 setLabels(new_labels)
                 setIsHourly(data.period === 1)
                 
-                setEnergy_Cons(new_energy_con)
+                setEnergy_Cons(new_energy_consumption)
+                setCum_Energy_Cost(cum_ene_cost)
+
                 setCum_Energy_Cons(cum_ene_con)
-                setEnergy_Cons_Norm(new_energy_con_norm)
+                setEnergy_Cons_Norm(new_energy_consumption_norm)
                 setCum_Energy_Cons_Norm(cum_ene_con_norm)
-                
+
                 setEnergy_Cost(new_energy_cost)
                 setEnergy_Cost_Norm(new_energy_cost_norm)
-                setCum_Energy_Cost(cum_ene_cost)
                 setCum_Energy_Cost_Norm(cum_ene_cost_norm)
 
-                console.log("new value", new_value)
-                console.log("new modes", new_modes)
-                console.log("new labels", new_labels)
-                console.log("ene_con", new_energy_con)
-                console.log("cum_ene_con", cum_ene_con)
+
+                // console.log("new value", new_value)
+                // console.log("new modes", new_modes)
+                // console.log("new labels", new_labels)
+                // console.log("ene_con", new_energy_con)
+                // console.log("cum_ene_con", cum_ene_con)
                 setIsLoading(false)
             })
     }

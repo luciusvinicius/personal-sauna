@@ -14,7 +14,7 @@ const ShowData = () => {
     const [ecos, setEcos] = useState([])
     const [comforts, setComforts] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const [values, setValues] = useState([])
+    const [temperature, setTemperature] = useState([])
     const [isHourly, setIsHourly] = useState(false)
 
     const [energy_comsumption, setEnergy_Cons] = useState([])
@@ -54,12 +54,12 @@ const ShowData = () => {
                     <Row>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(values,'Temperature')
+                                show_graph(temperature,'Temperature')
                             }
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(values)
+                                show_graph(temperature)
                             }
                         </Col>
                     </Row>
@@ -133,7 +133,7 @@ const ShowData = () => {
                         setEcos={setEcos}
                         setComforts={setComforts}
                         setIsLoading={setIsLoading}
-                        setValues={setValues}
+                        setTemperature={setTemperature}
                         setIsHourly={setIsHourly}
                         setEnergy_Cons={setEnergy_Cons}
                         setCum_Energy_Cons={setCum_Energy_Cons}
