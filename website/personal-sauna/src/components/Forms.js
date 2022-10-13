@@ -164,7 +164,23 @@ const convertDateToString = (date, hasYear = true) => {
     return `${month}/${day}`
 }
 
-const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues, setIsHourly, setEnergy_Cons, setCum_Energy_Cons}) => {
+const Forms = ({
+    setLabels,
+    setOffs, 
+    setEcos, 
+    setComforts, 
+    setIsLoading, 
+    setValues, 
+    setIsHourly, 
+    setEnergy_Cons, 
+    setCum_Energy_Cons,
+    setEnergy_Cons_Norm,
+    setEnergy_Cost,
+    setEnergy_Cost_Norm,
+    setCum_Energy_Cost,
+    setCum_Energy_Cons_Norm,
+    setCum_Energy_Cost_Norm,
+    }) => {
 
     const {handleSubmit, reset, control} = useForm({
         defaultValues: {
@@ -191,7 +207,7 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                 let offs = []
                 let labels = []
                 let energy_consumption = []
-                let energy_comsumption_norm = []
+                let energy_consumption_norm = []
                 let energy_cost = []
                 let energy_cost_norm = []
                 response.map(day => {
@@ -201,7 +217,7 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                     offs = offs.concat(day.modes_bool.off)
                     labels = labels.concat(day.date)
                     energy_consumption = energy_consumption.concat(day.consumo)
-                    energy_consumption_norm = energy_consumption.concat(day.consumo_normal)
+                    energy_consumption_norm = energy_consumption_norm.concat(day.consumo_normal)
                     energy_cost = energy_cost.concat(day.cost)
                     energy_cost_norm = energy_cost_norm.concat(day.cost_normal)
                 })
@@ -211,8 +227,16 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                 const new_value = filterValueByPeriod(data.period, values)
                 const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
                 const new_labels = filterLabelByPeriod(data.period, labels)
+                
                 const new_energy_con = sumValueByPeriod(data.period, energy_consumption)
+                const new_energy_con_norm = sumValueByPeriod(data.period, energy_consumption_norm)
                 const cum_ene_con = new_energy_con.map(cumulativeSum)
+                const cum_ene_con_norm = new_energy_con_norm.map(cumulativeSum)
+                
+                const new_energy_cost = sumValueByPeriod(data.period, energy_cost)
+                const new_energy_cost_norm = sumValueByPeriod(data.period, energy_cost_norm)
+                const cum_ene_cost = new_energy_cost.map(cumulativeSum)
+                const cum_ene_cost_norm = new_energy_cost_norm.map(cumulativeSum)
                 
 
                 setValues(new_value)
@@ -221,8 +245,16 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                 setComforts(new_modes.comfs)
                 setLabels(new_labels)
                 setIsHourly(data.period === 1)
+                
                 setEnergy_Cons(new_energy_con)
                 setCum_Energy_Cons(cum_ene_con)
+                setEnergy_Cons_Norm(new_energy_con_norm)
+                setCum_Energy_Cons_Norm(cum_ene_con_norm)
+                
+                setEnergy_Cost(new_energy_cost)
+                setEnergy_Cost_Norm(new_energy_cost_norm)
+                setCum_Energy_Cost(cum_ene_cost)
+                setCum_Energy_Cost_Norm(cum_ene_cost_norm)
 
                 console.log("new value", new_value)
                 console.log("new modes", new_modes)
