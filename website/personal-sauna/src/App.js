@@ -15,8 +15,7 @@ function App() {
           style={{
             backgroundColor: '#F4F4F4',
             backgroundSize: 'cover',
-            width: '100vw',
-            height: '100vh'
+            minHeight:'100%'
           }}
         >
         
