@@ -16,8 +16,9 @@ const ShowData = () => {
     const [comforts, setComforts] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [values, setValues] = useState([])
+    const [energy_comsumption, setEnergy_Cons] = useState([])
 
-    const graph_or_text = () => {
+    const graph_or_text = (val, title) => {
         return (labels.length === 0 ?
             <div className={"center-container"}>
                 <p>Please insert information on the form before :)</p>
@@ -28,7 +29,8 @@ const ShowData = () => {
                 offs={offs}
                 ecos={ecos}
                 comforts={comforts}
-                values={values}
+                values={val}
+                title={title}
             />
         )
     }
@@ -47,7 +49,7 @@ const ShowData = () => {
             <br/>
             <br/>
             <Row>
-                <Col xs={2} className="pl-5 pt-5">
+                <Col xl={2} md={4} className="pl-5 pt-5">
                     <Forms
                         setLabels={setLabels}
                         setOffs={setOffs}
@@ -55,10 +57,11 @@ const ShowData = () => {
                         setComforts={setComforts}
                         setIsLoading={setIsLoading}
                         setValues={setValues}
+                        setEnergy_Cons={setEnergy_Cons}
                     />
                 </Col>
             
-                <Col xs={10}>
+                <Col xl={10} md={8}>
                     <Row>
                         <Col xl={6} md={12}>
                             {isLoading ?
@@ -66,7 +69,7 @@ const ShowData = () => {
                                     <CircularProgress/>
                                 </div>
                                 :
-                                graph_or_text()
+                                graph_or_text(values,'Temperature')
                             }
                         </Col>
                         <Col xl={6} md={12}>
@@ -75,7 +78,7 @@ const ShowData = () => {
                                     <CircularProgress/>
                                 </div>
                                 :
-                                graph_or_text()
+                                graph_or_text(values)
                             }
                         </Col>
                     </Row>
@@ -86,7 +89,7 @@ const ShowData = () => {
                                     <CircularProgress/>
                                 </div>
                                 :
-                                graph_or_text()
+                                graph_or_text(energy_comsumption, 'Energy Consumption')
                             }
                         </Col>
                         <Col xl={6} md={12}>
@@ -95,7 +98,7 @@ const ShowData = () => {
                                     <CircularProgress/>
                                 </div>
                                 :
-                                graph_or_text()
+                                graph_or_text(energy_comsumption)
                             }
                         </Col>
                     </Row>
