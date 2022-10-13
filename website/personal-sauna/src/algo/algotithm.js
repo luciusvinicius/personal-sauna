@@ -119,17 +119,21 @@ const get_jumps = (modes, temperatures, prices) => {
 
 const getNextDay = (day) => {
     let tomorrow = new Date(day)
-    tomorrow.setDate(day.get_date() + 1)
+    tomorrow.setDate(day.getDate() + 1)
     return tomorrow
 }
 
 
 export const getData = async (start_day, end_day) => {
     let ret = [];
-    for (let i = start_day; i <= end_day; i++) {
+    // console.log(start_day, end_day)
+    for (let i = start_day; i <= end_day; i = getNextDay(i)) {
+        // console.log(start_day, end_day)
         // console.log(`calculating day ${i}`)
         let temperatures = await get_day_temp(i)
         let prices = await get_day_prices(i)
+        console.log(temperatures)
+        console.log(prices)
         let modes = initialize(temperatures)
         // console.log(temperatures)
         let count = 0
@@ -224,6 +228,6 @@ export const getData = async (start_day, end_day) => {
         }
         ret.push(day)
     }
-    console.log(ret)
+    // console.log(ret)
     return ret
 }

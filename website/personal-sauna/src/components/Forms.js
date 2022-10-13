@@ -10,8 +10,8 @@ import {periods, parameters} from "./FormOptions";
 import {getData} from "../algo/algotithm";
 
 
-const STARTING_DATE = "2021-12-01T01:00:00Z"
-const ENDING_DATE = "2021-12-31T01:00:00Z"
+const STARTING_DATE = "2021-12-01T00:00:00Z"
+const ENDING_DATE = "2021-12-31T00:00:00Z"
 const STARTING_PERIOD = 24
 const STARTING_PARAMETER = "external_temp"
 
