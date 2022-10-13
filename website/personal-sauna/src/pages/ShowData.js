@@ -27,6 +27,9 @@ const ShowData = () => {
     const [cum_energy_cost, setCum_Energy_Cost] = useState([])
     const [cum_energy_cost_norm, setCum_Energy_Cost_Norm] = useState([])
 
+    const [comf, setComf] = useState([])
+    const [cumComf, setCumComf] = useState([])
+
 
 
     const graph_or_text = () => {
@@ -59,7 +62,7 @@ const ShowData = () => {
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(temperature)
+                                show_graph(comf, "Comfort")
                             }
                         </Col>
                     </Row>
@@ -142,7 +145,9 @@ const ShowData = () => {
                         setEnergy_Cost_Norm = {setEnergy_Cost_Norm}
                         setCum_Energy_Cost = {setCum_Energy_Cost}
                         setCum_Energy_Cons_Norm = {setCum_Energy_Cons_Norm}
-                        setCum_Energy_Cost_Norm = {setCum_Energy_Cost_Norm} 
+                        setCum_Energy_Cost_Norm = {setCum_Energy_Cost_Norm}
+                        setComf={setComf}
+                        setCumComf={setCumComf}
                     />
                 </Col>
             

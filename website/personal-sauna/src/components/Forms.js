@@ -43,6 +43,8 @@ const Forms = ({
     setCum_Energy_Cost,
     setCum_Energy_Cons_Norm,
     setCum_Energy_Cost_Norm,
+    setComf,
+    setCumComf,
     }) => {
 
     const {handleSubmit, reset, control} = useForm({
@@ -94,6 +96,9 @@ const Forms = ({
                 const new_energy_cost = getSumByPeriod(data.period, energy_cost)
                 const new_energy_cost_norm = getSumByPeriod(data.period, energy_cost_norm)
 
+                console.log("comfs", comfs)
+                const new_comf = getSumByPeriod(data.period, comfs)
+
 
                 let cum_ene_con = getSumByPeriod(data.period, energy_consumption)
                 cum_ene_con = generate_cumulative(cum_ene_con)
@@ -110,6 +115,7 @@ const Forms = ({
                 setComforts(new_modes.comfs)
                 setLabels(new_labels)
                 setIsHourly(data.period === 1)
+                setComf(new_comf)
 
                 setEnergy_Cons(new_energy_consumption)
                 setCum_Energy_Cons(cum_ene_con)
