@@ -148,7 +148,7 @@ const convertDateToString = (date, hasYear = true) => {
     return `${month}/${day}`
 }
 
-const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues, setIsHourly}) => {
+const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues, setIsHourly, setEnergy_Cons}) => {
 
     const {handleSubmit, reset, control} = useForm({
         defaultValues: {
@@ -174,12 +174,14 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                 let comfs = []
                 let offs = []
                 let labels = []
+                let energy_consumption = []
                 response.map(day => {
                     values = values.concat(day.temps)
                     ecos = ecos.concat(day.modes_bool.eco)
                     comfs = comfs.concat(day.modes_bool.comf)
                     offs = offs.concat(day.modes_bool.off)
                     labels = labels.concat(day.date)
+                    energy_consumption = energy_consumption.concat(day.consumo)
                 })
 
                 const new_value = filterValueByPeriod(data.period, values)
@@ -192,6 +194,7 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                 setComforts(new_modes.comfs)
                 setLabels(new_labels)
                 setIsHourly(data.period === 1)
+                setEnergy_Cons(energy_consumption)
 
                 console.log("new value", new_value)
                 console.log("new modes", new_modes)

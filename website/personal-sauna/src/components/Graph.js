@@ -75,7 +75,7 @@ const filterQuantity = (arr, labels, scale) => {
     return arr.slice(0, labels.length).map((v) => v/scale)
 }
 
-const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], isHourly=false}) => {
+const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', isHourly=false}) => {
 
     if (offs.length === 0 || ecos.length === 0 || comforts.length === 0) {
         return <p>Loading</p>
@@ -94,7 +94,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], isHourly=fa
         datasets: [
             {
                 type: 'line',
-                label: 'Temperature',
+                label: title,
                 borderColor: 'rgb(255, 99, 132)',
                 borderWidth: 2,
                 fill: false,
