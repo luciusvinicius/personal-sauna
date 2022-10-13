@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 
-import {Controller, useForm} from "react-hook-form";
-import {Button, TextField} from "@mui/material";
-import FormInputText from "./FormInputText";
+import {useForm} from "react-hook-form";
+import {Button} from "@mui/material";
 import {Col, Row} from "react-bootstrap";
 import FormInputDropdown from "./FormInputDropdown";
 import {FormInputDatePicker} from "./FormInputDatePicker";
@@ -15,7 +14,7 @@ const ENDING_DATE = "2021-12-31T00:00:00Z"
 const STARTING_PERIOD = 24
 const STARTING_PARAMETER = "external_temp"
 
-const filterModesByPeriod = (period=1, ecos=[], comfs=[], offs=[]) => {
+const filterModesByPeriod = (period = 1, ecos = [], comfs = [], offs = []) => {
 
     if (period === 1) {
         return {
@@ -29,8 +28,8 @@ const filterModesByPeriod = (period=1, ecos=[], comfs=[], offs=[]) => {
     let new_comfs = []
     let new_offs = []
 
-    for (let i=0; i < ecos.length; i++) {
-        let idx = Math.floor(i/period)
+    for (let i = 0; i < ecos.length; i++) {
+        let idx = Math.floor(i / period)
         if (idx >= new_ecos.length) {
             new_ecos.push(0)
             new_offs.push(0)
@@ -43,21 +42,25 @@ const filterModesByPeriod = (period=1, ecos=[], comfs=[], offs=[]) => {
 
     return {
         ecos: new_ecos,
-        comfs: new_offs,
-        offs: new_comfs
+        comfs: new_comfs,
+        offs: new_offs
     }
 }
 
-const filterValueByPeriod = (period=1, values=[]) => {
+const filterValueByPeriod = (period = 1, values = []) => {
     let new_val = []
+
+    if (period === 1) {
+        return values
+    }
 
     let idx = 0
     let hadLastDivision = false
-    for (let i=0; i < values.length; i++) {
-        idx = Math.floor(i/period)
+    for (let i = 0; i < values.length; i++) {
+        idx = Math.floor(i / period)
         hadLastDivision = false
         if (idx >= new_val.length) {
-            new_val[idx-1] = new_val[idx-1]/period
+            new_val[idx - 1] = new_val[idx - 1] / period
             hadLastDivision = true
             new_val.push(0)
         }
@@ -89,11 +92,79 @@ const sumValueByPeriod = (period=1, values=[]) => {
 
 }
 
-const filterLabels = (period, days) => {
+const filterLabelByPeriod = (period, labels) => {
+    const WEEK_SIZE = 7
+    let new_labels = []
 
+    switch (period) {
+        case 1: // hourly
+            for (const date of labels) {
+                for (let hour = 0; hour < 24; hour++) {
+                    let hour_str = hour + ""
+                    if (hour < 10) {
+                        hour_str = `0${hour}`
+                    }
+                    new_labels.push(`${convertDateToString(date, false)} - ${hour_str}:00`)
+                }
+            }
+            break
+        case 24: // daily
+            new_labels = labels.map(label => convertDateToString(label))
+            break
+
+        case 24 * 7: // weekly
+            if (labels.length === 0) break
+
+            let startDate = labels[0]
+            let str = convertDateToString(startDate, false)
+            let isCompleteWeek = true
+
+            for (let i = 0; i < labels.length; i++) {
+
+                let date = labels[i]
+                if (i % WEEK_SIZE === 0) {
+                    isCompleteWeek = false
+                    str = convertDateToString(date, false)
+                }
+
+                if (i % WEEK_SIZE === WEEK_SIZE - 1) { // last element on week
+                    isCompleteWeek = true
+                    str = `${str} - ${convertDateToString(date, false)}`
+                    new_labels.push(str)
+                    str = ""
+                }
+            }
+
+            if (!isCompleteWeek) {
+                str = `${str} - ${convertDateToString(labels[labels.length-1], false)}`
+                new_labels.push(str)
+            }
+
+            break
+    }
+
+    return new_labels
 }
 
-const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues, setEnergy_Cons, setCum_Energy_Cons}) => {
+const convertDateToString = (date, hasYear = true) => {
+    let month = date.getMonth() + 1
+    let day = date.getDate()
+
+    if (month < 10) {
+        month = `0${month}`
+    }
+    if (day < 10) {
+        day = `0${day}`
+    }
+
+    if (hasYear) {
+        return `${date.getFullYear()}/${month}/${day}`
+    }
+
+    return `${month}/${day}`
+}
+
+const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues, setIsHourly, setEnergy_Cons, setCum_Energy_Cons}) => {
 
     const {handleSubmit, reset, control} = useForm({
         defaultValues: {
@@ -105,23 +176,11 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
     });
 
     const onSubmit = (data) => {
+        setIsLoading(true)
         console.log(data);
-        // const response = getData(data)
-        // // .then(response => {
-        // // console.log("response", response)
-        // setLabels(response.labels)
-        // const new_value = filterValueByPeriod(data.period, response.temps)
-        // setValues(new_value)
-        // const new_period = filterModesByPeriod(data.period, response.ecos, response.comforts, response.offs)
-        // setOffs(new_period.offs)
-        // setEcos(new_period.ecos)
-        // setComforts(new_period.comfs)
+
         let start_date = new Date(data.start_date)
         let end_date = new Date(data.end_date)
-        // console.log(start_date)
-        // let tomorrow = new Date(start_date)
-        // tomorrow.setDate(start_date.getDate()+1)
-        // console.log(tomorrow)
 
         getData(start_date, end_date)
             .then(response => {
@@ -149,25 +208,24 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
 
                 
                 const cum_ene_con = new_energy_con.map(cumulativeSum)
+                const new_labels = filterLabelByPeriod(data.period, labels)
 
                 setValues(new_value)
                 setOffs(new_modes.offs)
                 setEcos(new_modes.ecos)
                 setComforts(new_modes.comfs)
-                setLabels(labels)
+                setLabels(new_labels)
+                setIsHourly(data.period === 1)
                 setEnergy_Cons(new_energy_con)
                 setCum_Energy_Cons(cum_ene_con)
 
                 console.log("new value", new_value)
                 console.log("new modes", new_modes)
+                console.log("new labels", new_labels)
                 console.log("ene_con", new_energy_con)
                 console.log("cum_ene_con", cum_ene_con)
-
-
+                setIsLoading(false)
             })
-
-
-        // })
     }
 
 
@@ -226,9 +284,9 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                         <Button style={{marginLeft: "1em"}} onClick={() => reset()} variant={"outlined"}>Reset</Button>
                     </Col>
                     <Col xs={3}></Col>
-                    
+
                 </Row>
-                
+
             </form>
         </>
     )

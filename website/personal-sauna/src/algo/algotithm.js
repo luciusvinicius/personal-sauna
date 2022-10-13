@@ -132,8 +132,6 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
         // console.log(`calculating day ${i}`)
         let temperatures = await get_day_temp(i)
         let prices = await get_day_prices(i)
-        console.log(temperatures)
-        console.log(prices)
         let modes;
         if (off_flag) {
             modes = initialize(temperatures)
@@ -151,7 +149,6 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
             let jumps = get_jumps(modes, temperatures, prices)
             let min_hour = jumps.indexOf(Math.min(...jumps))
             if (modes[min_hour] === "off"){
-                console.log("A")
                 modes[min_hour] = "eco"
             }
             else if (modes[min_hour] === "eco"){
@@ -285,6 +282,5 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
         day["cost_diff"] = normal_cost - day["cost"].reduce((partialSum, a) => partialSum + a, 0)
         ret.push(day)
     }
-    console.log(ret)
     return ret
 }
