@@ -13,42 +13,46 @@ import {
     BarController,
 } from 'chart.js';
 
-const options = {
-    responsive: true,
+const generateOptions = (isHourly=false) => {
+    return {
+        responsive: true,
 
-    plugins: {
-        legend: {
-            position: 'top',
-        },
-        title: {
-            display: true,
-            text: 'Chart.js Combined Line/Bar Chart'
-        }
-    },
-    scales: {
-        x: {
-            grid: {
-                lineWidth: 3
+        plugins: {
+            legend: {
+                position: 'top',
             },
             title: {
                 display: true,
-                text: "Time"
+                text: 'Chart.js Combined Line/Bar Chart'
             }
         },
-        y: {
-            position: "right",
-            title: {
-                display: true,
-                text: "Parameter Value"
-            }
-        },
-        type_y: {
-            grid: {
-               drawOnChartArea: false,
+        scales: {
+            x: {
+                grid: {
+                    lineWidth: isHourly ? 1 : 3,
+                    drawOnChartArea: !isHourly
+                },
+                title: {
+                    display: true,
+                    text: "Time"
+                },
+                stacked: isHourly
             },
-            title: {
-                display: true,
-                text: "Heat Bomb Mode (%)"
+            y: {
+                position: "right",
+                title: {
+                    display: true,
+                    text: "Parameter Value"
+                },
+            },
+            type_y: {
+                grid: {
+                    drawOnChartArea: false,
+                },
+                title: {
+                    display: true,
+                    text: "Heat Bomb Mode (%)"
+                }
             }
         }
     }
@@ -71,7 +75,7 @@ const filterQuantity = (arr, labels, scale) => {
     return arr.slice(0, labels.length).map((v) => v/scale)
 }
 
-const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
+const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], isHourly=false}) => {
 
     if (offs.length === 0 || ecos.length === 0 || comforts.length === 0) {
         return <p>Loading</p>
@@ -81,7 +85,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
     const comforts_slice = filterQuantity(comforts, labels, scale)
     const offs_slice = filterQuantity(offs, labels, scale)
     const ecos_slice = filterQuantity(ecos, labels, scale)
-
+    const options = generateOptions(isHourly)
     // const new_labels = labels.map(label => label.getYear())
 
     // console.log("labels", labels)

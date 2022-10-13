@@ -16,6 +16,7 @@ const ShowData = () => {
     const [comforts, setComforts] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [values, setValues] = useState([])
+    const [isHourly, setIsHourly] = useState(false)
 
     const graph_or_text = () => {
         return (labels.length === 0 ?
@@ -29,6 +30,7 @@ const ShowData = () => {
                 ecos={ecos}
                 comforts={comforts}
                 values={values}
+                isHourly={isHourly}
             />
         )
     }
@@ -55,6 +57,7 @@ const ShowData = () => {
                         setComforts={setComforts}
                         setIsLoading={setIsLoading}
                         setValues={setValues}
+                        setIsHourly={setIsHourly}
                     />
                 </Col>
             
