@@ -126,10 +126,7 @@ const getNextDay = (day) => {
 
 export const getData = async (start_day, end_day, off_flag = true, comf_score = 124) => {
     let ret = [];
-    // console.log(start_day, end_day)
     for (let i = start_day; i <= end_day; i = getNextDay(i)) {
-        // console.log(start_day, end_day)
-        // console.log(`calculating day ${i}`)
         let temperatures = await get_day_temp(i)
         let prices = await get_day_prices(i)
         let modes;
@@ -142,7 +139,6 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
                 modes.push("eco")
             }
         }
-        // console.log(temperatures)
         let count = 0
         while(get_comfort(modes) < comf_score){
             count++
@@ -167,42 +163,30 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
         let eco = []
         let comf = []
         let off = []
-        modes.forEach(mode => {
-            if(mode == "off") {
-                day["comf"].push(0)
-                eco.push(0)
-                comf.push(0)
-                off.push(1)
-            }
-            else if(mode === "eco") {
-                day["comf"].push(4)
-                eco.push(1)
-                comf.push(0)
-                off.push(0)
-            }
-            else if(mode === "comf") {
-                day["comf"].push(8)
-                eco.push(0)
-                comf.push(1)
-                off.push(0)
-            }
-        })
         day["modes_bool"]["eco"] = eco
         day["modes_bool"]["comf"] = comf
         day["modes_bool"]["off"] = off
         day["consumo"] = []
+        day["cost_normal"] = []
         day["cost"] = []
-        
         let normal_cost = 0
         for (let j = 0; j < 24; j++) {
             let mode = modes[j]
             let price = prices[j]
             let temp = temperatures[j]
             if (mode === "off"){
+                day["comf"].push(0)
+                eco.push(0)
+                comf.push(0)
+                off.push(1)
                 day["consumo"].push(1)
                 day["cost"].push(price)
             }  
             else if (mode === "eco"){
+                day["comf"].push(4)
+                eco.push(1)
+                comf.push(0)
+                off.push(0)
                 if (temp < 10){
                     day["consumo"].push(1.6)
                     day["cost"].push(1.6*price)
@@ -217,6 +201,10 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
                 } 
             }   
             else if (mode === "comf"){
+                day["comf"].push(8)
+                eco.push(0)
+                comf.push(1)
+                off.push(0)
                 if (temp < 0) {
                     day["consumo"].push(11.4)
                     day["cost"].push(11.4*price)
@@ -237,44 +225,55 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
 
             if (j <= 5 || j >= 22) { // eco
                 if (temp < 10){
+                    day["cost_normal"].push(1.6*price)
                     normal_cost += 1.6*price
                 }  
                 else if (temp < 20){
+                    day["cost_normal"].push(0.8*price)
                     normal_cost += 0.8*price
                 } 
                 else {
+                    day["cost_normal"].push(0.4*price)
                     normal_cost += 0.4*price
                 } 
             }
             else if (j == 6 || j == 21) { // mix
                 if (temp < 0) {
+                    day["cost_normal"].push((11.4*price/2) + (1.6*price/2))
                     normal_cost += 11.4*price/2
                     normal_cost += 1.6*price/2
                 }
                 else if (temp < 10) {
+                    day["cost_normal"].push((2.4*price/2) + (1.6*price/2))
                     normal_cost += 2.4*price/2
                     normal_cost += 1.6*price/2
                 }
                 else if (temp < 20){
+                    day["cost_normal"].push((1.6*price/2) + (0.8*price/2))
                     normal_cost += 1.6*price/2
                     normal_cost += 0.8*price/2
                 } 
                 else {
+                    day["cost_normal"].push((0.4*price/2) + (0.8*price/2))
                     normal_cost += 0.4*price/2
                     normal_cost += 0.8*price/2
                 }
             }
             else { // comf
                 if (temp < 0) {
+                    day["cost_normal"].push(11.4*price)
                     normal_cost += 11.4*price
                 }
                 else if (temp < 10) {
+                    day["cost_normal"].push(2.4*price)
                     normal_cost += 2.4*price
                 }
                 else if (temp < 20){
+                    day["cost_normal"].push(1.6*price)
                     normal_cost += 1.6*price
                 } 
                 else {
+                    day["cost_normal"].push(0.8*price)
                     normal_cost += 0.8*price
                 }
             }
@@ -282,5 +281,6 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
         day["cost_diff"] = normal_cost - day["cost"].reduce((partialSum, a) => partialSum + a, 0)
         ret.push(day)
     }
+    console.log(ret)
     return ret
 }
