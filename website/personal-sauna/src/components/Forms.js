@@ -79,30 +79,26 @@ const Forms = ({
                     energy_cost_norm = energy_cost_norm.concat(day.cost_normal)
                 })
 
-                // const cumulativeSum = (sum => value => sum += value)(0);
 
                 const new_value = filterValueByPeriod(data.period, values)
+                console.log("new val", new_value)
                 const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
                 const new_labels = filterLabelByPeriod(data.period, labels)
+
                 const new_energy_consumption = filterValueByPeriod(data.period, energy_consumption)
                 const new_energy_consumption_norm = filterValueByPeriod(data.period, energy_consumption_norm)
                 const new_energy_cost = filterValueByPeriod(data.period, energy_cost)
                 const new_energy_cost_norm = filterValueByPeriod(data.period, energy_cost_norm)
 
 
-                let cum_ene_con = generate_cumulative(energy_consumption)
-                cum_ene_con = filterValueByPeriod(data.period, cum_ene_con)
-                let cum_ene_con_norm = generate_cumulative(energy_consumption_norm)
-                cum_ene_con_norm = filterValueByPeriod(data.period, cum_ene_con_norm)
-                let cum_ene_cost = generate_cumulative(energy_cost)
-                cum_ene_cost = filterValueByPeriod(data.period, cum_ene_cost)
-                let cum_ene_cost_norm = generate_cumulative(energy_cost_norm)
-                cum_ene_cost_norm = filterValueByPeriod(data.period, cum_ene_cost_norm)
-                
-
-                // const cum_ene_cost = new_energy_cost.map(cumulativeSum)
-                // const cum_ene_cost_norm = new_energy_cost_norm.map(cumulativeSum)
-                
+                let cum_ene_con = filterValueByPeriod(data.period, energy_consumption)
+                cum_ene_con = generate_cumulative(cum_ene_con)
+                let cum_ene_con_norm = filterValueByPeriod(data.period, energy_consumption_norm)
+                cum_ene_con_norm = generate_cumulative(cum_ene_con_norm)
+                let cum_ene_cost = filterValueByPeriod(data.period, energy_cost)
+                cum_ene_cost = generate_cumulative(cum_ene_cost)
+                let cum_ene_cost_norm = filterValueByPeriod(data.period, energy_cost_norm)
+                cum_ene_cost_norm = generate_cumulative(cum_ene_cost_norm)
 
                 setTemperature(new_value)
                 setOffs(new_modes.offs)
@@ -110,24 +106,16 @@ const Forms = ({
                 setComforts(new_modes.comfs)
                 setLabels(new_labels)
                 setIsHourly(data.period === 1)
-                
-                setEnergy_Cons(new_energy_consumption)
-                setCum_Energy_Cost(cum_ene_cost)
 
+                setEnergy_Cons(new_energy_consumption)
                 setCum_Energy_Cons(cum_ene_con)
                 setEnergy_Cons_Norm(new_energy_consumption_norm)
                 setCum_Energy_Cons_Norm(cum_ene_con_norm)
-
                 setEnergy_Cost(new_energy_cost)
+                setCum_Energy_Cost(cum_ene_cost)
                 setEnergy_Cost_Norm(new_energy_cost_norm)
                 setCum_Energy_Cost_Norm(cum_ene_cost_norm)
 
-
-                // console.log("new value", new_value)
-                // console.log("new modes", new_modes)
-                // console.log("new labels", new_labels)
-                // console.log("ene_con", new_energy_con)
-                // console.log("cum_ene_con", cum_ene_con)
                 setIsLoading(false)
             })
     }
