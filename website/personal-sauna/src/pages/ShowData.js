@@ -63,6 +63,7 @@ const ShowData = () => {
                             }
                         </Col>
                     </Row>
+                    <br></br>
                     <Row>
                         <Col xl={6} md={12}>
                             {
@@ -75,6 +76,7 @@ const ShowData = () => {
                             }
                         </Col>
                     </Row>
+                    <br></br>
                     <Row>
                         <Col xl={6} md={12}>
                             {
