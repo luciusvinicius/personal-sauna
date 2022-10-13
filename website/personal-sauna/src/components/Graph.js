@@ -82,7 +82,9 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[]}) => {
     const offs_slice = filterQuantity(offs, labels, scale)
     const ecos_slice = filterQuantity(ecos, labels, scale)
 
+    // const new_labels = labels.map(label => label.getYear())
 
+    // console.log("labels", labels)
     const data = {
         labels,
         datasets: [

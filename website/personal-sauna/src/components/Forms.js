@@ -43,13 +43,17 @@ const filterModesByPeriod = (period=1, ecos=[], comfs=[], offs=[]) => {
 
     return {
         ecos: new_ecos,
-        comfs: new_offs,
-        offs: new_comfs
+        comfs: new_comfs,
+        offs: new_offs
     }
 }
 
 const filterValueByPeriod = (period=1, values=[]) => {
     let new_val = []
+
+    if (period === 1) {
+        return values
+    }
 
     let idx = 0
     let hadLastDivision = false
@@ -72,8 +76,51 @@ const filterValueByPeriod = (period=1, values=[]) => {
 
 }
 
-const filterLabels = (period, days) => {
+const filterLabelByPeriod = (period, labels) => {
 
+    let new_labels = []
+    console.log("period", period)
+    switch (period) {
+        case 1:
+            console.log("period 1")
+            for (const date of labels) {
+
+                for (let hour = 0; hour < 24; hour++) {
+                    let hour_str = hour + ""
+                    if (hour < 10) {
+                        hour_str = `0${hour}`
+                    }
+                    new_labels.push(`${convertDateToString(date, false)} - ${hour}:00`)
+                }
+            }
+            break
+        case 24:
+            new_labels = labels.map(label => convertDateToString(label))
+            break
+
+        case 24 * 7:
+            break
+    }
+
+    return new_labels
+}
+
+const convertDateToString = (date, hasYear=true) => {
+    let month = date.getMonth()+1
+    let day = date.getDate()
+
+    if (month < 10) {
+        month = `0${month}`
+    }
+    if (day < 10) {
+        day = `0${day}`
+    }
+
+    if (hasYear) {
+        return `${date.getFullYear()}/${month}/${day}`
+    }
+
+    return `${month}/${day}`
 }
 
 const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValues}) => {
@@ -106,6 +153,7 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
         // tomorrow.setDate(start_date.getDate()+1)
         // console.log(tomorrow)
 
+        setIsLoading(true)
         getData(start_date, end_date)
             .then(response => {
                 console.log("sussy response", response)
@@ -124,15 +172,18 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
 
                 const new_value = filterValueByPeriod(data.period, values)
                 const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
+                const new_labels = filterLabelByPeriod(data.period, labels)
 
                 setValues(new_value)
                 setOffs(new_modes.offs)
                 setEcos(new_modes.ecos)
                 setComforts(new_modes.comfs)
-                setLabels(labels)
+                setLabels(new_labels)
 
                 console.log("new value", new_value)
                 console.log("new modes", new_modes)
+                console.log("new labels", new_labels)
+                setIsLoading(false)
 
 
             })
