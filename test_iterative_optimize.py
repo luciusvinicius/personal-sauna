@@ -1,6 +1,6 @@
-price = [185.90 ,150.00 ,127.50 ,114.60 ,114.10 ,111.10 ,112.60 ,114.50 ,125.02 ,131.97 ,141.80 ,138.00 ,115.60 ,124.99 ,125.02 ,143.00 ,141.00 ,156.17 ,186.03 ,193.15 ,187.95 ,182.30 ,175.12 ,140.38]
+price = [185.90 ,150.00 ,127.50 ,114.60 ,114.10 ,111.10 ]#,112.60 ,114.50 ,125.02 ,131.97 ,141.80 ,138.00 ,115.60 ,124.99 ,125.02 ,143.00 ,141.00 ,156.17 ,186.03 ,193.15 ,187.95 ,182.30 ,175.12 ,140.38]
 
-temp = [5,4,2,-1,3,6,7,8,8,9,11,13,15,17,19,21,19,16,16,13,11,9,7,6] # day's temperatures
+temp = [5,4,2,-1,3,6]#,7,8,8,9,11,13,15,17,19,21,19,16,16,13,11,9,7,6] # day's temperatures
 
 def optimize(temp):
     sol = []
@@ -22,7 +22,7 @@ def get_comfort(sol):
 
 def get_cost(sol, temp):
     sum = 0
-    for i in range(24):
+    for i in range(6):
         mode = sol[i]
         tmp = temp[i]
         price_h = price[i]
@@ -40,7 +40,7 @@ def get_cost(sol, temp):
 
 def get_jumps(sol, temp, price):
     jump_cost = []
-    for i in range(24):
+    for i in range(6):
         mode = sol[i]
         tmp = temp[i]
         price_h = price[i]
@@ -67,7 +67,9 @@ def get_jumps(sol, temp, price):
 
 sol = optimize(temp)
 
-while(get_comfort(sol) < 124):
+c = 0
+while(get_comfort(sol) < 124/4):
+    c += 1
     jumps = get_jumps(sol, temp, price)
     print(jumps)
     min_hour = jumps.index(min(jumps))
@@ -81,5 +83,7 @@ while(get_comfort(sol) < 124):
         break
     #print(sol)
     #print("Current comfort", get_comfort(sol))
+    print(get_comfort(sol))
 
 print(sol, get_comfort(sol), get_cost(sol, temp))
+print(c)
