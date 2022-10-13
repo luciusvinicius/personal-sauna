@@ -57,25 +57,12 @@ const ShowData = () => {
                     <Row>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(temperature,'Temperature')
+                                show_graph(temperature,'Temperature (Cº)')
                             }
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(cumComf, "Comfort Cumulative")
-                            }
-                        </Col>
-                    </Row>
-                    <br></br>
-                    <Row>
-                        <Col xl={6} md={12}>
-                            {
-                                show_graph(energy_comsumption, 'Energy Consumption', energy_comsumption_norm, 'Normal energy Consumption')
-                            }
-                        </Col>
-                        <Col xl={6} md={12}>
-                            {
-                                show_graph(cum_energy_comsumption, 'Energy Consumption Cumulative', cum_energy_comsumption_norm, 'Normal Energy Consumption Cumulative', true)
+                                show_graph(cumComf, "Cumulative Comfort")
                             }
                         </Col>
                     </Row>
@@ -83,12 +70,25 @@ const ShowData = () => {
                     <Row>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(energy_cost, 'Energy Cost', energy_cost_norm, 'Normal Energy Cost')
+                                show_graph(energy_comsumption, 'Energy Consumption (kWh)', energy_comsumption_norm, 'Standard Energy Consumption (kWh)')
                             }
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(cum_energy_cost, 'Energy Cost Cumulative', cum_energy_cost_norm, 'Normal Energy Cost Cumulative', true)
+                                show_graph(cum_energy_comsumption, 'Cumulative Energy Consumption (kWh)', cum_energy_comsumption_norm, 'Standard Cumulative Energy Consumption (kWh)', true)
+                            }
+                        </Col>
+                    </Row>
+                    <br></br>
+                    <Row>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(energy_cost, 'Energy Cost (€)', energy_cost_norm, 'Standard Energy Cost (€)')
+                            }
+                        </Col>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(cum_energy_cost, 'Cumulative Energy Cost (€)', cum_energy_cost_norm, 'Standard Cumulative Energy Cost (€)', true)
                             }
                         </Col>
                     </Row>

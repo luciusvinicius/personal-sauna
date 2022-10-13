@@ -24,7 +24,7 @@ const ENDING_DATE = "2021-12-31T00:00:00Z"
 const STARTING_PERIOD = 24
 const STARTING_PARAMETER = "external_temp"
 const MIN_COMF = 0
-const MAX_COMF = 194
+const MAX_COMF = 192
 const STARTING_COMF = 124
 const STARTING_OFF = true
 
@@ -190,7 +190,7 @@ const Forms = ({
                     <Col xs={8}>
                         <FormInputSwitch
                             name={"off_input"}
-                            label={"Enable / Disable Off mode"}
+                            label={"Allow Off"}
                             control={control}
                             defaultChecked={STARTING_OFF}
                         />
