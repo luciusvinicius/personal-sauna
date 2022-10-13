@@ -3,7 +3,6 @@ import {Col, Row, Container} from "react-bootstrap";
 import Forms from "../components/Forms"
 import {CircularProgress} from "@mui/material";
 import Graph from "../components/Graph";
-import {LABELS} from "../temps/Temps.json";
 import "../css/index.css"
 import PieChart from "../components/PieChart";
 
@@ -19,12 +18,58 @@ const ShowData = () => {
     const [isHourly, setIsHourly] = useState(false)
     const [energy_comsumption, setEnergy_Cons] = useState([])
 
-    const graph_or_text = (val, title) => {
-        return (labels.length === 0 ?
+
+
+    const graph_or_text = () => {
+        return (labels.length === 0 && !isLoading ?
             <div className={"center-container"}>
                 <p>Please insert information on the form before :)</p>
             </div>
             :
+            loading_or_graph()
+
+        )
+    }
+
+    const loading_or_graph = () => {
+        console.log("isloading", isLoading)
+        return (
+            isLoading ?
+                <div className={"center-container"}>
+                    <CircularProgress/>
+                </div>
+                :
+                <>
+                    <Row>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(values,'Temperature')
+                            }
+                        </Col>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(values)
+                            }
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(energy_comsumption, 'Energy Consumption')
+                            }
+                        </Col>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(energy_comsumption)
+                            }
+                        </Col>
+                    </Row>
+                </>
+        )
+    }
+
+    const show_graph = (val, title) => {
+        return (
             <Graph
                 labels={labels}
                 offs={offs}
@@ -37,6 +82,8 @@ const ShowData = () => {
             />
         )
     }
+
+
 
     const pie_chart = () => {
         return (
@@ -66,46 +113,7 @@ const ShowData = () => {
                 </Col>
             
                 <Col xl={10} md={8}>
-                    <Row>
-                        <Col xl={6} md={12}>
-                            {isLoading ?
-                                <div className={"center-container"}>
-                                    <CircularProgress/>
-                                </div>
-                                :
-                                graph_or_text(values,'Temperature')
-                            }
-                        </Col>
-                        <Col xl={6} md={12}>
-                            {isLoading ?
-                                <div className={"center-container"}>
-                                    <CircularProgress/>
-                                </div>
-                                :
-                                graph_or_text(values)
-                            }
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xl={6} md={12}>
-                            {isLoading ?
-                                <div className={"center-container"}>
-                                    <CircularProgress/>
-                                </div>
-                                :
-                                graph_or_text(energy_comsumption, 'Energy Consumption')
-                            }
-                        </Col>
-                        <Col xl={6} md={12}>
-                            {isLoading ?
-                                <div className={"center-container"}>
-                                    <CircularProgress/>
-                                </div>
-                                :
-                                graph_or_text(energy_comsumption)
-                            }
-                        </Col>
-                    </Row>
+                    {graph_or_text()}
                 </Col>
                
             </Row>

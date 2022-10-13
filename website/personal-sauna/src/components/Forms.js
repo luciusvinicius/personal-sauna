@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 
-import {Controller, useForm} from "react-hook-form";
-import {Button, TextField} from "@mui/material";
-import FormInputText from "./FormInputText";
+import {useForm} from "react-hook-form";
+import {Button} from "@mui/material";
 import {Col, Row} from "react-bootstrap";
 import FormInputDropdown from "./FormInputDropdown";
 import {FormInputDatePicker} from "./FormInputDatePicker";
@@ -160,12 +159,12 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
     });
 
     const onSubmit = (data) => {
+        setIsLoading(true)
         console.log(data);
 
         let start_date = new Date(data.start_date)
         let end_date = new Date(data.end_date)
 
-        setIsLoading(true)
         getData(start_date, end_date)
             .then(response => {
                 console.log("sussy response", response)
@@ -200,12 +199,7 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                 console.log("new modes", new_modes)
                 console.log("new labels", new_labels)
                 setIsLoading(false)
-
-
             })
-
-
-        // })
     }
 
 
