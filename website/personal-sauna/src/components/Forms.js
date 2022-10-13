@@ -19,7 +19,6 @@ import Card from 'react-bootstrap/Card';
 import FormInputSlider from "./FormInputSlider";
 import FormInputSwitch from "./FormInputSwitch";
 
-import "../css/Form.css";
 
 const STARTING_DATE = "2021-12-01T00:00:00Z"
 const ENDING_DATE = "2021-12-31T00:00:00Z"
