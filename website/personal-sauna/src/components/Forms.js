@@ -37,6 +37,7 @@ const Forms = ({
     setCum_Energy_Cost,
     setCum_Energy_Cons_Norm,
     setCum_Energy_Cost_Norm,
+    setCost_Diff
     }) => {
 
     const {handleSubmit, reset, control} = useForm({
@@ -67,6 +68,7 @@ const Forms = ({
                 let energy_consumption_norm = []
                 let energy_cost = []
                 let energy_cost_norm = []
+                let cost_diff = []
                 response.map(day => {
                     values = values.concat(day.temps)
                     ecos = ecos.concat(day.modes_bool.eco)
@@ -77,6 +79,7 @@ const Forms = ({
                     energy_consumption_norm = energy_consumption_norm.concat(day.consumo_normal)
                     energy_cost = energy_cost.concat(day.cost)
                     energy_cost_norm = energy_cost_norm.concat(day.cost_normal)
+                    cost_diff = cost_diff.concat(day.cost_diff)
                 })
 
                 // const cumulativeSum = (sum => value => sum += value)(0);
@@ -89,6 +92,8 @@ const Forms = ({
                 const new_energy_cost = filterValueByPeriod(data.period, energy_cost)
                 const new_energy_cost_norm = filterValueByPeriod(data.period, energy_cost_norm)
 
+                const new_cost_diff = cost_diff.reduce((partialSum, a) => partialSum + a, 0);
+
 
                 let cum_ene_con = generate_cumulative(energy_consumption)
                 cum_ene_con = filterValueByPeriod(data.period, cum_ene_con)
@@ -98,6 +103,7 @@ const Forms = ({
                 cum_ene_cost = filterValueByPeriod(data.period, cum_ene_cost)
                 let cum_ene_cost_norm = generate_cumulative(energy_cost_norm)
                 cum_ene_cost_norm = filterValueByPeriod(data.period, cum_ene_cost_norm)
+
                 
 
                 // const cum_ene_cost = new_energy_cost.map(cumulativeSum)
@@ -121,6 +127,8 @@ const Forms = ({
                 setEnergy_Cost(new_energy_cost)
                 setEnergy_Cost_Norm(new_energy_cost_norm)
                 setCum_Energy_Cost_Norm(cum_ene_cost_norm)
+
+                setCost_Diff(new_cost_diff)
 
 
                 // console.log("new value", new_value)

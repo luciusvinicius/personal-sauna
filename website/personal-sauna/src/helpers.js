@@ -72,7 +72,13 @@ export const filterLabelByPeriod = (period, labels) => {
                     if (hour < 10) {
                         hour_str = `0${hour}`
                     }
-                    new_labels.push(`${convertDateToString(date, false)} - ${hour_str}:00`)
+                    if (hour == 0){
+                        new_labels.push(`${convertDateToString(date, false)} - ${hour_str}:00`)
+                    }
+                    else{
+                        new_labels.push(`${hour_str}:00`)
+                    }
+                    
                 }
             }
             break
