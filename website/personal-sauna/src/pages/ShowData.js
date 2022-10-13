@@ -14,10 +14,10 @@ const ShowData = () => {
     const [ecos, setEcos] = useState([])
     const [comforts, setComforts] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const [values, setValues] = useState([])
+    const [temperature, setTemperature] = useState([])
     const [isHourly, setIsHourly] = useState(false)
     const [energy_comsumption, setEnergy_Cons] = useState([])
-
+    const [cumEnergyCost, setCumEnergyCost] = useState([])
 
 
     const graph_or_text = () => {
@@ -43,12 +43,12 @@ const ShowData = () => {
                     <Row>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(values,'Temperature')
+                                show_graph(temperature,'Temperature')
                             }
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(values)
+                                show_graph(temperature)
                             }
                         </Col>
                     </Row>
@@ -60,7 +60,7 @@ const ShowData = () => {
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(energy_comsumption)
+                                show_graph(cumEnergyCost, "Accumulate Energy Cost")
                             }
                         </Col>
                     </Row>
@@ -106,9 +106,10 @@ const ShowData = () => {
                         setEcos={setEcos}
                         setComforts={setComforts}
                         setIsLoading={setIsLoading}
-                        setValues={setValues}
+                        setTemperature={setTemperature}
                         setIsHourly={setIsHourly}
                         setEnergy_Cons={setEnergy_Cons}
+                        setCumEnergyCost={setCumEnergyCost}
                     />
                 </Col>
             

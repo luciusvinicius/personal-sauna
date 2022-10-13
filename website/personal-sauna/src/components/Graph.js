@@ -13,7 +13,7 @@ import {
     BarController,
 } from 'chart.js';
 
-const generateOptions = (isHourly=false) => {
+const generateOptions = (title="", isHourly=false) => {
     return {
         responsive: true,
 
@@ -23,7 +23,7 @@ const generateOptions = (isHourly=false) => {
             },
             title: {
                 display: true,
-                text: 'Chart.js Combined Line/Bar Chart'
+                text: title
             }
         },
         scales: {
@@ -85,7 +85,7 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
     const comforts_slice = filterQuantity(comforts, labels, scale)
     const offs_slice = filterQuantity(offs, labels, scale)
     const ecos_slice = filterQuantity(ecos, labels, scale)
-    const options = generateOptions(isHourly)
+    const options = generateOptions(title, isHourly)
     // const new_labels = labels.map(label => label.getYear())
 
     // console.log("labels", labels)
