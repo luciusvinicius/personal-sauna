@@ -14,15 +14,14 @@ const long = -6.7567;
 
 export const get_day_temp = async (day) => {
     const temps = []
-    const day_1 = 1638316800
-    const init = day_1 + (day-1)*day_ts
-    const final = day_1 + day*day_ts-1
+    const day_1 = day.getTime()/1000
+    const final = day_1 + day_ts - 1
 
     const options = {
         method: 'GET'
     };
 
-    const response = await fetch(`https://history.openweathermap.org/data/2.5/history/city?lat=${lat}&lon=${long}&start=${init}&end=${final}&appid=329abd3f61d3cfe6766fbd34fa983679`, options)
+    const response = await fetch(`https://history.openweathermap.org/data/2.5/history/city?lat=${lat}&lon=${long}&start=${day_1}&end=${final}&appid=329abd3f61d3cfe6766fbd34fa983679`, options)
 
     if (response.ok) { 
         let json = await response.json();
@@ -37,9 +36,13 @@ export const get_day_temp = async (day) => {
 
 export const get_day_prices = async (day) => {
     const prices = []
-    let date = "2021-12-"
-    if (day >= 10) date = date.concat(day)
-    else if (day > 0) date = date.concat("0",day)
+    let date = ""
+    let month = day.getMonth()+1
+    let today = day.getDate()
+    if (month < 10) month = "0"+month
+    if (today < 10) today = "0"+today
+    date = date.concat(day.getFullYear(),"-",month,"-", today)
+    // console.log(date)
 
     const options = {
         method: 'GET',
@@ -55,9 +58,6 @@ export const get_day_prices = async (day) => {
         json.forEach(price => {
             prices.push(price/1000)
         });
-        // json.list.forEach(element => {
-        //     temps.push(element.main.temp-273.15)
-        // });
     }
 
     console.log(prices)
