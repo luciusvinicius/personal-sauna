@@ -191,6 +191,9 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                 let offs = []
                 let labels = []
                 let energy_consumption = []
+                let energy_comsumption_norm = []
+                let energy_cost = []
+                let energy_cost_norm = []
                 response.map(day => {
                     values = values.concat(day.temps)
                     ecos = ecos.concat(day.modes_bool.eco)
@@ -198,17 +201,19 @@ const Forms = ({setLabels, setOffs, setEcos, setComforts, setIsLoading, setValue
                     offs = offs.concat(day.modes_bool.off)
                     labels = labels.concat(day.date)
                     energy_consumption = energy_consumption.concat(day.consumo)
+                    energy_consumption_norm = energy_consumption.concat(day.consumo_normal)
+                    energy_cost = energy_cost.concat(day.cost)
+                    energy_cost_norm = energy_cost_norm.concat(day.cost_normal)
                 })
 
                 const cumulativeSum = (sum => value => sum += value)(0);
 
                 const new_value = filterValueByPeriod(data.period, values)
                 const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
-                const new_energy_con = sumValueByPeriod(data.period, energy_consumption)
-
-                
-                const cum_ene_con = new_energy_con.map(cumulativeSum)
                 const new_labels = filterLabelByPeriod(data.period, labels)
+                const new_energy_con = sumValueByPeriod(data.period, energy_consumption)
+                const cum_ene_con = new_energy_con.map(cumulativeSum)
+                
 
                 setValues(new_value)
                 setOffs(new_modes.offs)

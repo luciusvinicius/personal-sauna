@@ -61,7 +61,19 @@ const ShowData = () => {
                         </Col>
                         <Col xl={6} md={12}>
                             {
-                                show_graph(energy_comsumption)
+                                show_graph(energy_comsumption, 'Energy Consumption Cumulative', [1,2], 'Normal Energy Consumption Cumulative')
+                            }
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(energy_comsumption, 'Energy Consumption', [1,2], 'Normal Energy Coost')
+                            }
+                        </Col>
+                        <Col xl={6} md={12}>
+                            {
+                                show_graph(energy_comsumption, 'Energy Cost Cumulative', [1,2], 'Normal Energy Cost Cumulative')
                             }
                         </Col>
                     </Row>
