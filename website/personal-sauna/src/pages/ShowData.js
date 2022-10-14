@@ -124,11 +124,11 @@ const ShowData = () => {
     }
 
     return (
-        <Container fluid >
+        <Container fluid>
             <Row>
                 <Col xl={2} md={4} className="pt-4">
-                    <Row>
-                        <Card className="text-center p-0" style={{borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px'}}>
+                    <Row style={{paddingLeft:"2vh"}}>
+                        <Card className="text-center p-0">
                             <Card.Header>Profit gain</Card.Header>
                             <br></br>
                             <Card.Body className="justify-content-md-center">
@@ -140,7 +140,7 @@ const ShowData = () => {
                     </Row>
                     <br></br>
                     <br></br>
-                    <Row>
+                    <Row style={{paddingLeft:"2vh"}}>
                         <Forms
                             setLabels={setLabels}
                             setOffs={setOffs}

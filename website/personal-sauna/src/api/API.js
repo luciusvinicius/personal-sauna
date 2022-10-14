@@ -65,7 +65,7 @@ export const get_day_prices = async (day) => {
         method: 'GET',
     };
 
-    let url = `http://localhost:5000/bydate/${date}`
+    let url = `http://0.0.0.0:5000/bydate/${date}`
 
     const cache = await caches.open('cacheName');
     const cached_response = await cache.match(url);
