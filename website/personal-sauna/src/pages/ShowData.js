@@ -129,7 +129,7 @@ const ShowData = () => {
                 <Col xl={2} md={4} className="pt-4">
                     <Row style={{paddingLeft:"2vh"}}>
                         <Card className="text-center p-0">
-                            <Card.Header>Profit gain</Card.Header>
+                            <Card.Header>Optimization Savings</Card.Header>
                             <br></br>
                             <Card.Body className="justify-content-md-center">
                                 <Card.Title>

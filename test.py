@@ -1,13 +1,13 @@
 from itertools import product
+import random
 
-price = [185.90 ,150.00 ,127.50 ,114.60 ,114.10 ,111.10 ]#,112.60 ,114.50 ,125.02 ,131.97 ,141.80 ,138.00 ,115.60 ,124.99 ,125.02 ,143.00 ,141.00 ,156.17 ,186.03 ,193.15 ,187.95 ,182.30 ,175.12 ,140.38]
+# price = [185.90 ,150.00 ,127.50 ,114.60 ,114.10 ,111.10 ]#,112.60 ,114.50 ,125.02 ,131.97 ,141.80 ,138.00 ,115.60 ,124.99 ,125.02 ,143.00 ,141.00 ,156.17 ,186.03 ,193.15 ,187.95 ,182.30 ,175.12 ,140.38]
 
-temp = [5,4,2,-1,3,6]#,7,8,8,9,11,13,15,17,19,21,19,16,16,13,11,9,7,6] # day's temperatures
-
+# temp = [5,4,2,-1,3,6]#,7,8,8,9,11,13,15,17,19,21,19,16,16,13,11,9,7,6] # day's temperatures
 
 n_rec = 0
 
-def all_comb():
+def all_comb(price, temp):
     prod = product([0,1,2], repeat=6)
 
     eco = {10: 1.6, 20:0.8, 21:0.4}
@@ -32,14 +32,12 @@ def all_comb():
         if r[1] > 124/4:
             print(r)
             break
+    return r[2]
 
 def optimize(temp):
     sol = []
-    for hour in temp:
-        if hour > 10:
-            sol.append("eco")
-        else:
-            sol.append("off")
+    for _ in temp:
+        sol.append("off")
     return sol
 
 def get_comfort(sol):
@@ -51,7 +49,7 @@ def get_comfort(sol):
             sum += 8
     return sum
 
-def get_cost(sol, temp):
+def get_cost(sol, temp, price):
     sum = 0
     for i in range(6):
         mode = sol[i]
@@ -75,13 +73,26 @@ def get_jumps(sol, temp, price):
         mode = sol[i]
         tmp = temp[i]
         price_h = price[i]
-        cost = 0
-        gain = 0
-        if mode == "off": # off -> eco
-            cost = 0.6
-            gain = 4
+        # print("hour", i, mode, tmp, price_h)
+        if mode == "off":
+            cost_eco = 0
+            cost_comf = 0
+            if tmp < 0:
+                cost_eco = 0.6
+                cost_comf = 10.4 
+            elif tmp < 10:
+                cost_eco = 0.6
+                cost_comf = 1.4
+            elif tmp < 20:
+                cost_eco = -0.2
+                cost_comf = 0.6
+            else:
+                cost_eco = -0.6
+                cost_comf = -0.2
+            # print("Added two jumps")
+            jump_cost.append((cost_eco*price_h/4,i,"eco"))
+            jump_cost.append((cost_comf*price_h/8,i,"comf"))
         elif mode == "eco":
-            gain = 4
             if tmp < 0:
                 cost = 9.8
             elif tmp < 10:
@@ -90,34 +101,41 @@ def get_jumps(sol, temp, price):
                 cost = 0.8
             else:
                 cost = 0.4
-        elif mode == "comf":
-            cost = 100000000000
-            gain = 1
-        jump_cost.append(cost*price_h/gain)
+            # print("Added one jumps")
+            jump_cost.append((cost*price_h/4,i,"comf"))
+        # print(len(jump_cost))
     return jump_cost
 
-def algo():
+def algo(temp, price):
     sol = optimize(temp)
 
-    c = 0
     while(get_comfort(sol) < 124/4):
-        c += 1
-        jumps = get_jumps(sol, temp, price)
-        #print(jumps)
-        min_hour = jumps.index(min(jumps))
-        if sol[min_hour] == "off":
-            sol[min_hour] = "eco"
-            #print("Upgraded hour", min_hour, " (off) to eco!")
-        elif sol[min_hour] == "eco":
-            sol[min_hour] = "comf"
-            #print("Upgraded hour", min_hour, " (eco) to comf!")
-        elif sol[min_hour] == "comf":
-            break
-        #print(sol)
-        #print("Current comfort", get_comfort(sol))
-        #print(get_comfort(sol))
-    print("-------------------")
-    print(sol, get_comfort(sol), get_cost(sol, temp))
+    #print(get_comfort(sol2))
+        jumps = get_jumps(sol,temp,price)
+        #print(len(jumps))
+        min_jump = min(jumps, key=lambda x: x[0])
+        sol[min_jump[1]] = min_jump[2]
+        # print(sol2)
+
+    # c = 0
+    # while(get_comfort(sol) < 124/4):
+    #     c += 1
+    #     jumps = get_jumps(sol, temp, price)
+    #     #print(jumps)
+    #     min_hour = jumps.index(min(jumps))
+    #     if sol[min_hour] == "off":
+    #         sol[min_hour] = "eco"
+    #         #print("Upgraded hour", min_hour, " (off) to eco!")
+    #     elif sol[min_hour] == "eco":
+    #         sol[min_hour] = "comf"
+    #         #print("Upgraded hour", min_hour, " (eco) to comf!")
+    #     elif sol[min_hour] == "comf":
+    #         break
+    #     #print(sol)
+    #     #print("Current comfort", get_comfort(sol))
+    #     #print(get_comfort(sol))
+    print(sol, get_comfort(sol), get_cost(sol, temp, price))
+    return get_cost(sol, temp, price)
     #print(c)
 
 
@@ -125,7 +143,24 @@ def algo():
 if __name__ == "__main__":
     #print(recursive(0,0,0,0))
     #print(v2())
-    
-    all_comb()
-    algo()
+    price = [1.6, 0.6, 0.9, 0.3, 0.9, 1.5]
+    temp = [14, 14, 2, 16, 1, 3]
+    all_comb(price, temp)
+    algo(temp, price)
+    print("__________________________")
+    # for i in range(100):
+    #     price = [random.randint(2,25)/10 for _ in range(6)]
+    #     temp = [random.randint(-5,25) for _ in range(6)]
+    #     #print(i)
+    #     #print(price)
+    #     #print(temp)
+    #     a = all_comb(price, temp)
+    #     b = algo(temp, price)
+    #     if(a != b):
+    #         print(price)
+    #         print(temp)
+        #print("__________________________")
     #v3()
+
+# [2.0, 2.1, 1.0, 2.3, 0.9, 1.0]
+# [-3, 13, 6, 10, 5, 18]
