@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import {useForm} from "react-hook-form";
 import {Button} from "@mui/material";
@@ -49,6 +49,8 @@ const Forms = ({
     setCost_Diff
     }) => {
 
+    const [offInput, setOffInput] = useState(true)
+
     const {handleSubmit, reset, control} = useForm({
         defaultValues: {
             start_date: STARTING_DATE,
@@ -56,7 +58,7 @@ const Forms = ({
             period: STARTING_PERIOD,
             parameter: STARTING_PARAMETER,
             comf_slider: STARTING_COMF,
-            off_input: STARTING_OFF
+            // off_input: STARTING_OFF
         }
     });
 
@@ -67,7 +69,7 @@ const Forms = ({
         let start_date = new Date(data.start_date)
         let end_date = new Date(data.end_date)
 
-        getData(start_date, end_date, data.off_input ,data.comf_slider)
+        getData(start_date, end_date, offInput ,data.comf_slider)
             .then(response => {
                 console.log("sussy response", response)
                 let values = []
@@ -190,11 +192,13 @@ const Forms = ({
                 <Row className="justify-content-md-center">
                     <Col xs={8}>
                         <FormInputSwitch 
-                            style={{color: "#e60000"}}
-                            name={"off_input"}
+                            color={"#e60000"}
+                            // name={"off_input"}
                             label={"Allow Off"}
                             control={control}
                             defaultChecked={STARTING_OFF}
+                            offInput={offInput}
+                            setOffInput={setOffInput}
                         />
                     </Col>
                 </Row>
