@@ -16,6 +16,7 @@ const FormInputSwitch = ({offInput, setOffInput, label, defaultChecked, color}) 
         tracker.style.backgroundColor = offInput ? color : "black"
         circle.style.backgroundColor = offInput ? color : "white"
 
+
     }, [offInput])
 
     return (

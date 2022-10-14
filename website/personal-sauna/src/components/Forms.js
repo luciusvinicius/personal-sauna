@@ -22,7 +22,7 @@ import FormButtonSubmit from "./FormButtonSubmit";
 
 
 const STARTING_DATE = "2021-12-01T00:00:00Z"
-const ENDING_DATE = "2021-12-08T00:00:00Z"
+const ENDING_DATE = "2021-12-07T00:00:00Z"
 const STARTING_PERIOD = 24
 const STARTING_PARAMETER = "external_temp"
 const MIN_COMF = 0
@@ -36,8 +36,8 @@ const Forms = ({
     setEcos, 
     setComforts, 
     setIsLoading, 
-    setTemperature, 
-    setIsHourly, 
+    setTemperature,
+    setIsHourly,
     setEnergy_Cons, 
     setCum_Energy_Cons,
     setEnergy_Cons_Norm,
@@ -59,7 +59,6 @@ const Forms = ({
             period: STARTING_PERIOD,
             parameter: STARTING_PARAMETER,
             comf_slider: STARTING_COMF,
-            // off_input: STARTING_OFF
         }
     });
 
@@ -69,14 +68,12 @@ const Forms = ({
 
     const onSubmit = (data) => {
         setIsLoading(true)
-        console.log(data);
 
         let start_date = new Date(data.start_date)
         let end_date = new Date(data.end_date)
 
         getData(start_date, end_date, offInput ,data.comf_slider)
             .then(response => {
-                console.log("sussy response", response)
                 let values = []
                 let ecos = []
                 let comfs = []
@@ -130,7 +127,7 @@ const Forms = ({
                 setEcos(new_modes.ecos)
                 setComforts(new_modes.comfs)
                 setLabels(new_labels)
-                setIsHourly(data.period === 1)
+                setIsHourly(data.period/1 === 1)
                 setCumComf(cum_comf)
 
                 setEnergy_Cons(new_energy_consumption)
@@ -177,22 +174,7 @@ const Forms = ({
                     </Col>
                 </Row>
                 <br/>
-                {/*<Row className="justify-content-md-center">*/}
-                {/*    /!*<Col xs={8}>*!/*/}
-                {/*        /!*<FormInputDropdown*!/*/}
-                {/*        /!*    name={"period"}*!/*/}
-                {/*        /!*    label={"Period"}*!/*/}
-                {/*        /!*    control={control}*!/*/}
-                {/*        /!*    options={periods}*!/*/}
-                {/*        /!*//*/}
-                {/*        <FormButtonSubmit*/}
-                {/*            name={"period"}*/}
-                {/*            control={control}*/}
-                {/*            onSubmit={onSubmit}*/}
-                {/*            handleSubmit={handleSubmit}*/}
-                {/*        />*/}
-                {/*    /!*</Col>*!/*/}
-                {/*</Row>*/}
+
                 <br/>
                 <Row className="justify-content-md-center">
                     <Col xs={8}>
@@ -222,16 +204,12 @@ const Forms = ({
 
                 <br/>
                 <Row className="justify-content-md-center">
-                    {/*<Col xs={2}></Col>*/}
-                    {/*<Col xs={4}>*/}
-                    {/*    /!*<Button variant={"contained"} style={{backgroundColor: "#e60000"}} onClick={handleSubmit(onSubmit)}>Submit</Button>*!/*/}
-                    {/*</Col>*/}
-                    {/*<Col xs={2}></Col>*/}
                     <FormButtonSubmit
                         name={"period"}
                         control={control}
                         onSubmit={onSubmit}
                         handleSubmit={handleSubmit}
+                        setHourly={setIsHourly}
                     />
                 </Row>
                 <br/>

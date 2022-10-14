@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React,  {useState} from "react";
 import {Col, Row, Container} from "react-bootstrap";
 import Forms from "../components/Forms"
 import {CircularProgress} from "@mui/material";
@@ -29,8 +29,6 @@ const ShowData = () => {
 
     const [cumComf, setCumComf] = useState([])
     const [cost_diff, setCost_Diff] = useState([])
-
-
 
     const graph_or_text = () => {
         return (labels.length === 0 && !isLoading ?
@@ -101,7 +99,6 @@ const ShowData = () => {
                 offs={offs}
                 ecos={ecos}
                 comforts={comforts}
-                // values={values}
                 isHourly={isHourly}
                 values={val}
                 title={title}
@@ -112,16 +109,6 @@ const ShowData = () => {
         )
     }
 
-
-
-    const pie_chart = () => {
-        return (
-            <div>
-                <PieChart values={[12,8,4]}/>
-            </div>
-        
-        );
-    }
 
     return (
         <Container fluid>
