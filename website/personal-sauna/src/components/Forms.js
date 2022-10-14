@@ -145,7 +145,7 @@ const Forms = ({
 
     return (
         <>
-        <Card style={{minHeight:"450px", borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px'}}>
+        <Card>
             <form className="pl-5 pt-5">
                 <Row className="justify-content-md-center">
                     <Col xs={8} className="pl-5">

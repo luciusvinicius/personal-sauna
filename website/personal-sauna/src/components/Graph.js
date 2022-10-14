@@ -60,7 +60,7 @@ const generateOptions = (title="", isHourly=false) => {
                 title: {
                     display: true,
                     text: "Heat Bomb Mode (%)"
-                }
+                },
             }
         }
     }
