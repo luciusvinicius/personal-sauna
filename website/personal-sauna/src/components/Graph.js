@@ -94,10 +94,6 @@ const Graph = ({labels=[], offs=[], ecos=[], comforts=[], values=[], title='', i
     const offs_slice = filterQuantity(offs, labels, scale)
     const ecos_slice = filterQuantity(ecos, labels, scale)
     const options = generateOptions(title, isHourly)
-    // const new_labels = labels.map(label => label.getYear())
-
-    // console.log("labels", labels)
-    // console.log("STEP", stepped)
 
     const data = {
         labels,

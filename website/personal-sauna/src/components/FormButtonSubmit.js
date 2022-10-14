@@ -7,7 +7,7 @@ import {palette} from "@mui/system"
 import {Controller } from "react-hook-form";
 
 
-const FormButtonSubmit = ({name, control, onSubmit, handleSubmit}) => {
+const FormButtonSubmit = ({name, control, onSubmit, handleSubmit, setHourly}) => {
 
     const RED = "rgb(230, 0 ,0)"
     const ITEMS = ["Hourly", "Daily", "Weekly"]
@@ -15,8 +15,6 @@ const FormButtonSubmit = ({name, control, onSubmit, handleSubmit}) => {
 
     const FAKE_RED = "rgb(250, 0, 0, 0.5)"
     const BLACK_RED = "rgb(190, 0, 0)"
-
-    const [val, setVal] = useState("fds")
 
     return (
         <>
@@ -32,7 +30,7 @@ const FormButtonSubmit = ({name, control, onSubmit, handleSubmit}) => {
                             value={value}
                             onChange={(e) => {
                                 onChange(e)
-                                console.log(handleSubmit)
+                                setHourly(e.target.value/1 === 1)
                                 handleSubmit(onSubmit)()
                             }}
                             style={{margin: "auto"}}
