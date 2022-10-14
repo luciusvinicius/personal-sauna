@@ -27,22 +27,26 @@ export const get_day_temp = async (day) => {
 
     let url = `https://history.openweathermap.org/data/2.5/history/city?lat=${lat}&lon=${long}&start=${day_1}&end=${final}&appid=329abd3f61d3cfe6766fbd34fa983679`
 
-    const cache = await caches.open('cacheName');
-    const cached_response = await cache.match(url);
+    // const cache = await caches.open('cacheName');
+    // const cached_response = await cache.match(url);
+    const cached_response = localStorage.getItem(url)
 
     let response;
-    if (typeof cached_response === 'undefined') { 
+    if (cached_response === null) {
         console.log("(Temnp) Not cached! Fetching and caching...")
         response = await fetch(url, options);
-        await cache.put(url, response)
-        response = await cache.match(url);
+        let response_json = await response.json()
+
+        localStorage.setItem(url, JSON.stringify(response_json))
+        response = JSON.parse(localStorage.getItem(url))
     }
     else {
         console.log("(Temp) Cached! Retrieving...")
-        response = cached_response
+        response = JSON.parse(cached_response)
     }
 
-    let json = await response.json();
+    // console.log("response", response)
+    let json = await response;
     json.list.forEach(element => {
         temps.push(element.main.temp-273.15)
     });
