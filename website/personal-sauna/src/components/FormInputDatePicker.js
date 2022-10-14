@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {Controller } from "react-hook-form";
 
-export const FormInputDatePicker = ({name, label, control}) => {
+export const FormInputDatePicker = ({name, label, control, handleSubmit, onSubmit}) => {
     // const [value, setValue] = React.useState(null);
 
     return (
@@ -17,7 +17,10 @@ export const FormInputDatePicker = ({name, label, control}) => {
                     <DatePicker
                         label={label}
                         value={value}
-                        onChange={onChange}
+                        onChange={(e) => {
+                            onChange(e)
+                            handleSubmit(onSubmit)()
+                        }}
                         renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                 </LocalizationProvider>

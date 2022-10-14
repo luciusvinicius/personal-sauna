@@ -65,7 +65,7 @@ const Forms = ({
 
     useEffect(() => {
         handleSubmit(onSubmit)()
-    }, [])
+    }, [offInput])
 
     const onSubmit = (data) => {
         setIsLoading(true)
@@ -159,6 +159,8 @@ const Forms = ({
                             name={"start_date"}
                             label={"Starting date"}
                             control={control}
+                            handleSubmit={handleSubmit}
+                            onSubmit={onSubmit}
                         />
                     </Col>
                 </Row>
@@ -169,6 +171,8 @@ const Forms = ({
                             name={"end_date"}
                             label={"Ending date"}
                             control={control}
+                            handleSubmit={handleSubmit}
+                            onSubmit={onSubmit}
                         />
                     </Col>
                 </Row>
@@ -198,6 +202,8 @@ const Forms = ({
                             control={control}
                             min={MIN_COMF}
                             max={MAX_COMF}
+                            handleSubmit={handleSubmit}
+                            onSubmit={onSubmit}
                         />
                     </Col>
                 </Row>
@@ -205,7 +211,6 @@ const Forms = ({
                     <Col xs={8}>
                         <FormInputSwitch 
                             color={"#e60000"}
-                            // name={"off_input"}
                             label={"Allow Off"}
                             control={control}
                             defaultChecked={STARTING_OFF}

@@ -4,7 +4,7 @@ import {Slider} from "@mui/material";
 
 
 
-const FormInputSlider = ({control, name, label, min, max, step=4}) => {
+const FormInputSlider = ({control, name, label, min, max, handleSubmit, onSubmit, step=4}) => {
 
     return (
         <Controller
@@ -20,6 +20,7 @@ const FormInputSlider = ({control, name, label, min, max, step=4}) => {
                         max={max}
                         valueLabelDisplay={"auto"}
                         step={step}
+                        onChangeCommitted={() => handleSubmit(onSubmit)()}
                         sx={{
                             color: '#e60000',
                         }}
