@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {useForm} from "react-hook-form";
 import {Button} from "@mui/material";
@@ -18,10 +18,11 @@ import {
 import Card from 'react-bootstrap/Card';
 import FormInputSlider from "./FormInputSlider";
 import FormInputSwitch from "./FormInputSwitch";
+import FormButtonSubmit from "./FormButtonSubmit";
 
 
 const STARTING_DATE = "2021-12-01T00:00:00Z"
-const ENDING_DATE = "2021-12-31T00:00:00Z"
+const ENDING_DATE = "2021-12-08T00:00:00Z"
 const STARTING_PERIOD = 24
 const STARTING_PARAMETER = "external_temp"
 const MIN_COMF = 0
@@ -62,6 +63,10 @@ const Forms = ({
         }
     });
 
+    useEffect(() => {
+        handleSubmit(onSubmit)()
+    }, [offInput])
+
     const onSubmit = (data) => {
         setIsLoading(true)
         console.log(data);
@@ -96,27 +101,28 @@ const Forms = ({
                     energy_cost_norm = energy_cost_norm.concat(day.cost_normal)
                     cost_diff = cost_diff.concat(day.cost_diff)
                 })
+                const period = data.period/1
 
-                const new_temperature = getAvgByPeriod(data.period, values)
-                const new_modes = filterModesByPeriod(data.period, ecos, comfs, offs)
-                const new_labels = filterLabelByPeriod(data.period, labels)
+                const new_temperature = getAvgByPeriod(period, values)
+                const new_modes = filterModesByPeriod(period, ecos, comfs, offs)
+                const new_labels = filterLabelByPeriod(period, labels)
                 const new_cost_diff = cost_diff.reduce((partialSum, a) => partialSum + a, 0);
 
-                const new_energy_consumption = getSumByPeriod(data.period, energy_consumption)
-                const new_energy_consumption_norm = getSumByPeriod(data.period, energy_consumption_norm)
-                const new_energy_cost = getSumByPeriod(data.period, energy_cost)
-                const new_energy_cost_norm = getSumByPeriod(data.period, energy_cost_norm)
+                const new_energy_consumption = getSumByPeriod(period, energy_consumption)
+                const new_energy_consumption_norm = getSumByPeriod(period, energy_consumption_norm)
+                const new_energy_cost = getSumByPeriod(period, energy_cost)
+                const new_energy_cost_norm = getSumByPeriod(period, energy_cost_norm)
 
-                let cum_comf = getSumByPeriod(data.period, comfs_total)
+                let cum_comf = getSumByPeriod(period, comfs_total)
                 cum_comf = generate_cumulative(cum_comf)
 
-                let cum_ene_con = getSumByPeriod(data.period, energy_consumption)
+                let cum_ene_con = getSumByPeriod(period, energy_consumption)
                 cum_ene_con = generate_cumulative(cum_ene_con)
-                let cum_ene_con_norm = getSumByPeriod(data.period, energy_consumption_norm)
+                let cum_ene_con_norm = getSumByPeriod(period, energy_consumption_norm)
                 cum_ene_con_norm = generate_cumulative(cum_ene_con_norm)
-                let cum_ene_cost = getSumByPeriod(data.period, energy_cost)
+                let cum_ene_cost = getSumByPeriod(period, energy_cost)
                 cum_ene_cost = generate_cumulative(cum_ene_cost)
-                let cum_ene_cost_norm = getSumByPeriod(data.period, energy_cost_norm)
+                let cum_ene_cost_norm = getSumByPeriod(period, energy_cost_norm)
                 cum_ene_cost_norm = generate_cumulative(cum_ene_cost_norm)
 
                 setTemperature(new_temperature)
@@ -153,6 +159,8 @@ const Forms = ({
                             name={"start_date"}
                             label={"Starting date"}
                             control={control}
+                            handleSubmit={handleSubmit}
+                            onSubmit={onSubmit}
                         />
                     </Col>
                 </Row>
@@ -163,20 +171,28 @@ const Forms = ({
                             name={"end_date"}
                             label={"Ending date"}
                             control={control}
+                            handleSubmit={handleSubmit}
+                            onSubmit={onSubmit}
                         />
                     </Col>
                 </Row>
                 <br/>
-                <Row className="justify-content-md-center">
-                    <Col xs={8}>
-                        <FormInputDropdown
-                            name={"period"}
-                            label={"Period"}
-                            control={control}
-                            options={periods}
-                        />
-                    </Col>
-                </Row>
+                {/*<Row className="justify-content-md-center">*/}
+                {/*    /!*<Col xs={8}>*!/*/}
+                {/*        /!*<FormInputDropdown*!/*/}
+                {/*        /!*    name={"period"}*!/*/}
+                {/*        /!*    label={"Period"}*!/*/}
+                {/*        /!*    control={control}*!/*/}
+                {/*        /!*    options={periods}*!/*/}
+                {/*        /!*//*/}
+                {/*        <FormButtonSubmit*/}
+                {/*            name={"period"}*/}
+                {/*            control={control}*/}
+                {/*            onSubmit={onSubmit}*/}
+                {/*            handleSubmit={handleSubmit}*/}
+                {/*        />*/}
+                {/*    /!*</Col>*!/*/}
+                {/*</Row>*/}
                 <br/>
                 <Row className="justify-content-md-center">
                     <Col xs={8}>
@@ -186,6 +202,8 @@ const Forms = ({
                             control={control}
                             min={MIN_COMF}
                             max={MAX_COMF}
+                            handleSubmit={handleSubmit}
+                            onSubmit={onSubmit}
                         />
                     </Col>
                 </Row>
@@ -193,7 +211,6 @@ const Forms = ({
                     <Col xs={8}>
                         <FormInputSwitch 
                             color={"#e60000"}
-                            // name={"off_input"}
                             label={"Allow Off"}
                             control={control}
                             defaultChecked={STARTING_OFF}
@@ -205,12 +222,17 @@ const Forms = ({
 
                 <br/>
                 <Row className="justify-content-md-center">
-                    <Col xs={2}></Col>
-                    <Col xs={4}>
-                        <Button variant={"contained"} style={{backgroundColor: "#e60000"}} onClick={handleSubmit(onSubmit)}>Submit</Button>
-                    </Col>
-                    <Col xs={2}></Col>
-
+                    {/*<Col xs={2}></Col>*/}
+                    {/*<Col xs={4}>*/}
+                    {/*    /!*<Button variant={"contained"} style={{backgroundColor: "#e60000"}} onClick={handleSubmit(onSubmit)}>Submit</Button>*!/*/}
+                    {/*</Col>*/}
+                    {/*<Col xs={2}></Col>*/}
+                    <FormButtonSubmit
+                        name={"period"}
+                        control={control}
+                        onSubmit={onSubmit}
+                        handleSubmit={handleSubmit}
+                    />
                 </Row>
                 <br/>
             </form>
