@@ -157,6 +157,17 @@ export const getData = async (start_day, end_day, off_flag = true, comf_score = 
             modes[minJump[1]] = minJump[2]
         }
 
+        if (off_flag) {
+            for(let k = 0; k < 24; k++) {
+                if (modes[k] === "off") {
+                    let temp = temperatures[k]
+                    if (temp > 10) {
+                        modes[k] = "eco"
+                    } 
+                }
+            }
+        }
+
         let day = {};
         day.date = i
         day["modes"] = modes
